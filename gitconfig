@@ -1,0 +1,23 @@
+[user]
+	name = Matt Sears
+	email = matt@mattsears.com
+[color]
+	diff = auto
+[color "diff"]
+	new = cyan
+	old = magenta
+	frag = yellow
+	meta = green
+	commit = normal
+[alias]
+	co = checkout
+[apply]
+	whitespace = nowarn
+[core]
+  excludesfile = /Users/matt/.gitignore
+  editor = mate -w
+[mirror]
+  summary = true
+[github]
+  user = mattsears
+  token = d42ba02798aee843c445a7e003a28e8e	

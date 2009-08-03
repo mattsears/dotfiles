@@ -1,0 +1,275 @@
+#!/usr/bin/env sh
+
+################################################################
+# files and directories
+################################################################
+
+# Finder
+alias o='open . &'
+alias sf='open -a Safari'
+
+alias texclean='rm -f *.toc *.aux *.log *.cp *.fn *.tp *.vr *.pg *.ky'
+alias clean='echo -n "Really clean this directory?";
+  read yorn;
+  if test "$yorn" = "y"; then
+     rm -fR \#* *~ .*~ *.bak .*.bak  *.tmp .*.tmp core a.out;
+     echo "Cleaned.";
+  else
+     echo "Not cleaned.";
+  fi'
+
+alias h='history'
+alias l="ls -lah"
+alias ls="ls -F"
+alias ll="ls -l"
+alias la='ls -A'
+alias c='clear'
+alias dir='ls -la'
+alias ld='ls -al -d * | egrep "^d"' # only subdirectories
+alias lt='ls -alt | head -20' # recently changed files
+
+alias md='mkdir -p'
+alias rd=rmdir
+alias ..='cd ..'
+alias ...='cd ../..'
+
+# misc
+alias reload='. ~/.bash_profile'
+
+# directory tree - http://www.shell-fu.org/lister.php?id=209
+alias dirf='find . -type d | sed -e "s/[^-][^\/]*\//  |/g" -e "s/|\([^ ]\)/|-\1/"'
+
+#calendar with today highlighted - http://www.shell-fu.org/lister.php?id=210
+alias tcal='cal | sed "s/^/ /;s/$/ /;s/ $(date +%e) / $(date +%e | sed '\''s/./#/g'\'') /"'
+
+# count files by type - http://www.shell-fu.org/lister.php?id=173
+alias ftype='find ${*-.} -type f | xargs file | awk -F, '\''{print $1}'\'' | awk '\''{$1=NULL;print $0}'\'' | sort | uniq -c | sort -nr'
+
+# convert permissions to octal - http://www.shell-fu.org/lister.php?id=205
+alias lo='ls -l | sed -e 's/--x/1/g' -e 's/-w-/2/g' -e 's/-wx/3/g' -e 's/r--/4/g' -e 's/r-x/5/g' -e 's/rw-/6/g' -e 's/rwx/7/g' -e 's/---/0/g''
+
+# get an ordered list of subdirectory sizes - http://www.shell-fu.org/lister.php?id=275
+alias dux='du -sk ./* | sort -n | awk '\''BEGIN{ pref[1]="K"; pref[2]="M"; pref[3]="G";} { total = total + $1; x = $1; y = 1; while( x > 1024 ) { x = (x + 1023)/1024; y++; } printf("%g%s\t%s\n",int(x*10)/10,pref[y],$2); } END { y = 1; while( total > 1024 ) { total = (total + 1023)/1024; y++; } printf("Total: %g%s\n",int(total*10)/10,pref[y]); }'\'''
+
+# create directory and cd into that directory
+function take() {
+    mkdir -p "$1"
+    cd "$1"
+}
+
+#compare files using comm (requires perl) - http://www.shell-fu.org/lister.php?id=186
+function compare(){
+    comm $1 $2 | perl -pe 's/^/1: /g;s/1: \t/2: /g;s/2: \t/A: /g;' | sort
+}
+
+# keep your home directory organised - http://www.shell-fu.org/lister.php?id=310
+export TD="$HOME/temp/`date +'%Y-%m-%d'`"
+td(){
+    td=$TD
+    if [ ! -z "$1" ]; then
+        td="$HOME/temp/`date -d "$1 days" +'%Y-%m-%d'`";
+    fi
+    mkdir -p $td; cd $td
+    unset td
+}
+
+
+################################################################
+# file/directory navigation
+################################################################
+
+# changing directory to code project
+function c { cd ~/Workspace/active/$1; }
+
+# cd
+alias ..='cd ..'
+alias cdw='cd ~/Workspace/active'
+alias cdd='cd ~/Documents'
+alias cddt='cd ~/Desktop'
+
+################################################################
+# file/directory manipulation
+################################################################
+
+# copy and paste from the command line - http://www.shell-fu.org/lister.php?id=177
+function  ccopy(){ cp $1 /tmp/ccopy.$1; }
+alias cpaste="ls /tmp/ccopy* | sed 's|[^\.]*.\.||' | xargs -I % mv /tmp/ccopy.% ./%"
+
+alias e='exit'
+alias k9="killall -9"
+function killnamed () {
+    ps ax | grep $1 | cut -d ' ' -f 2 | xargs kill
+}
+
+# bash function to decompress archives - http://www.shell-fu.org/lister.php?id=375
+function extract () {
+    if [ -f $1 ] ; then
+        case $1 in
+            *.tar.bz2)   tar xvjf $1        ;;
+            *.tar.gz)    tar xvzf $1     ;;
+            *.bz2)       bunzip2 $1       ;;
+            *.rar)       unrar x $1     ;;
+            *.gz)        gunzip $1     ;;
+            *.tar)       tar xvf $1        ;;
+            *.tbz2)      tar xvjf $1      ;;
+            *.tgz)       tar xvzf $1       ;;
+            *.zip)       unzip $1     ;;
+            *.Z)         uncompress $1  ;;
+            *.7z)        7z x $1    ;;
+            *)           echo "'$1' cannot be extracted via >extract<" ;;
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
+}
+
+function zipr() {
+  zip -r $1.zip $1
+}
+
+
+################################################################
+# processor and cpu
+################################################################
+
+alias tu='top -o cpu' # cpu
+alias tm='top -o vsize' # memory
+
+################################################################
+# git
+################################################################
+
+alias gl='git pull'
+alias gp='git push'
+alias gd='git diff'
+alias gc='git commit -v'
+alias gca='git commit -v -a'
+alias gb='git branch -v'
+alias gs='git status'
+alias ungit="find . -name '.git' -exec rm -rf {} \;"
+
+function gco {
+    if [ -z "$1" ]; then
+        git checkout master
+    else
+        git checkout $1
+    fi
+}
+
+function st {
+    if [ -d ".svn" ]; then
+        svn status
+    else
+        git status
+    fi
+}
+
+################################################################
+# svn
+################################################################
+
+alias sup='svn up' # trust me 3 chars makes a different
+alias svnclear='find . -name .svn -print0 | xargs -0 rm -rf' # removes all .svn folders from directory recursively
+alias svnaddall='svn status | grep "^\?" | awk "{print \$2}" | xargs svn add' # adds all unadded files
+
+################################################################
+# ruby
+################################################################
+
+alias r="rake"
+# use readline, completion and require rubygems by default for irb
+alias irb='irb --simple-prompt -r irb/completion -rubygems'
+
+# really awesome function, use: cdgem <gem name>, cd's into your gems directory
+# and opens gem that best matches the gem name provided
+function cdgem {
+    cd `gem env gemdir`/gems
+    cd `ls | grep $1 | sort | tail -1`
+}
+
+function gemdoc {
+    GEMDIR=`gem env gemdir`/doc
+    open $GEMDIR/`ls $GEMDIR | grep $1 | sort | tail -1`/rdoc/index.html
+}
+
+alias qri='qri -w 106'
+alias fri='fri -w 106'
+
+################################################################
+# rails
+################################################################
+
+alias sc='script/console'
+alias ss='script/server' # start up the beast; use "ss -d" to detach
+alias sg='script/generate'
+alias sr='kill -USR2 `cat tmp/pids/mongrel.pid`' # restart daemonized Mongrel
+alias sst='kill `cat tmp/pids/mongrel.pid`' # stop daemonized Mongrel
+alias a='autotest -rails'
+alias fix='rake spec:db:fixtures:load'
+alias tl='tail -f log/development.log'
+alias tlog='tail -f log/development.log'
+alias migrate='rake db:migrate db:test:clone'
+alias rst='touch tmp/restart.txt'
+
+# see http://railstips.org/2007/5/31/even-edgier-than-edge-rails
+function edgie() {
+    ruby ~/projects/rails/rails/railties/bin/rails $1 && cd $1 && ln -s ~/projects/rails/rails vendor/rails
+}
+
+################################################################
+# postgres
+################################################################
+
+alias pgstart="su - postgres -c '/usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l logfile start'"
+alias pgstop="su - postgres -c '/usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data stop'"
+
+
+################################################################
+# misc
+################################################################
+
+# Csh compatability:
+alias unsetenv=unset
+function setenv () {
+    export $1="$2"
+}
+
+function markdown() {
+    /Applications/TextMate.app/Contents/SharedSupport/Support/bin/Markdown.pl $1 > $1.html
+}
+
+# Function which adds an alias to the current shell and to the ~/.bash_aliases file.
+function add-alias ()
+{
+    local name=$1 value="$2"
+    echo "alias $name='$value'" >> ~/.bash_aliases
+    eval "alias $name='$value'"
+    alias $name
+}
+
+# publish ssh key on remote server
+function authme() {
+    ssh $1 'cat >>.ssh/authorized_keys' <~/.ssh/id_rsa.pub
+}
+
+# overwrite a file with zeroes - http://www.shell-fu.org/lister.php?id=94
+function zero() {
+    case "$1" in
+        "")     echo "Usage: zero <file>"
+            return -1;
+    esac
+    filesize=`wc -c  "$1" | awk '{print $1}'`
+    dd ifif=/dev/zero of=$1 count=$filesize bs=1
+}
+
+# create a terminal calculator - http://www.shell-fu.org/lister.php?id=216
+function calc(){ echo "${1}"|bc -l; }
+
+# commands starting with % for pasting from web
+alias %=' '
+
+# From Chris Wanstrath
+function pless() {
+    pygmentize $1 | less -r
+}
+
