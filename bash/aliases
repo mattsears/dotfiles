@@ -195,6 +195,8 @@ function gemdoc {
 alias qri='qri -w 106'
 alias fri='fri -w 106'
 
+
+
 ################################################################
 # rails
 ################################################################
@@ -210,6 +212,7 @@ alias tl='tail -f log/development.log'
 alias tlog='tail -f log/development.log'
 alias migrate='rake db:migrate db:test:clone'
 alias rst='touch tmp/restart.txt'
+alias f='cucumber features -n'
 
 # see http://railstips.org/2007/5/31/even-edgier-than-edge-rails
 function edgie() {
