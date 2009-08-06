@@ -6,3 +6,4 @@ complete -C ~/.bash/completion_scripts/project_completion -o default c
 complete -C ~/.bash/completion_scripts/capistrano_completion -o default cap
 
 complete -W "$(echo `cat ~/.ssh/known_hosts | cut -f 1 -d ' ' | sed -e s/,.*//g | uniq | grep -v "\["`;)" ssh
+complete -W "$(echo `cat ~/.ssh/config | cut -f1,2 -d ' ' | sed -e 's/Host[^s+]//g; s/^ *//; s/ *$//; /#.*/d' -e '/^$/d' | uniq`;)" ssh
