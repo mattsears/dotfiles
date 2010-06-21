@@ -1,5 +1,6 @@
 #!/usr/bin/ruby
 require 'rubygems'
+require "ap"
 require 'hirb'; Hirb::View.enable
 require 'irb/completion'
 require 'irb/ext/save-history'
@@ -8,11 +9,25 @@ IRB.conf[:SAVE_HISTORY] = 1000
 IRB.conf[:HISTORY_FILE] = "#{ENV['HOME']}/.irb_history"
 IRB.conf[:PROMPT_MODE] = :SIMPLE
 IRB.conf[:AUTO_INDENT] = true
+IRB::Irb.class_eval do
+  def output_value
+    ap @context.last_value
+  end
+end
 
 class Object
   # list methods which aren't in superclass
   def local_methods(obj = self)
     (obj.methods - obj.class.superclass.instance_methods).sort
+  end
+
+  def my_methods
+    base_object = case self
+                  when Class  then Class.new
+                  when Module then Module.new
+                  else             Object.new
+                  end
+    (methods - base_object.methods).sort
   end
 
   # print documentation
@@ -36,12 +51,20 @@ class Object
 
 end
 
+
 def copy(str)
   IO.popen('pbcopy', 'w') { |f| f << str.to_s }
 end
 
 def paste
   `pbpaste`
+end
+
+alias q exit
+
+if ENV.include?('RAILS_ENV') && !Object.const_defined?('RAILS_DEFAULT_LOGGER')
+  require 'logger'
+  RAILS_DEFAULT_LOGGER = Logger.new(STDOUT)
 end
 
 load File.dirname(__FILE__) + '/.railsrc' if $0 == 'irb' && ENV['RAILS_ENV']

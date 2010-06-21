@@ -1,0 +1,9 @@
+#!/usr/bin/ruby
+# ~/.aprc file.
+AwesomePrint.defaults = {
+  :indent => -2,
+  :color => {
+    :hash  => :pale,
+    :class => :white
+  }
+}
