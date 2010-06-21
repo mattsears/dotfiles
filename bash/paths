@@ -1,9 +1,14 @@
-export PATH="/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:~/bin:/usr/local/pgsql/bin:$PATH"
+#JRuby
+export PATH=$HOME/bin/jruby/bin:$PATH
+
+export PATH="/usr/bin;/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:~/bin:/usr/local/pgsql/bin:$PATH"
 export MANPATH="/usr/local/man:/usr/local/mysql/man:/usr/local/git/man:$MANPATH"
 export PATH=/opt/local/bin:/opt/local/sbin:$PATH
 export PATH=/Developer/SDKs/Flex/bin:$PATH
 
 # ImageMagick
-export MAGICK_HOME=/usr/local/ImageMagick
+export MAGICK_HOME=/usr/local/include/ImageMagick
 export DYLD_LIBRARY_PATH=$MAGICK_HOME/lib
 export PATH=$MAGICK_HOME/bin:$PATH
+
+if [ -s ~/.rvm/scripts/rvm ] ; then source ~/.rvm/scripts/rvm ; fi

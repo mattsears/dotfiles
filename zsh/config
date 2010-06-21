@@ -6,6 +6,7 @@ autoload -U colors
 colors
 setopt prompt_subst
 PROMPT='\n\u%~ %{$fg_bold[black]%}$(vcprompt) \n→ %{$reset_color%}'
+#PROMPT="\n\u:\w\[$GREEN\]\$(parse_git_branch)\[$NO_COLOR\] \n→ "
 
 if [[ -n $SSH_CONNECTION ]]; then
   export PS1='%m:%3~$(git_info_for_prompt)%# '

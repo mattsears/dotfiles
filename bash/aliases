@@ -79,13 +79,16 @@ td(){
 ################################################################
 
 # changing directory to code project
-function c { cd ~/Workspace/active/$1; }
+function work { cd ~/Workspace/active/$1; }
 
 # cd
 alias ..='cd ..'
 alias cdw='cd ~/Workspace/active'
 alias cdd='cd ~/Documents'
 alias cddt='cd ~/Desktop'
+alias mkdir='mkdir -p $1'
+alias rm='rm -Rf $1'
+alias sym='ln -s $2 $1'
 
 ################################################################
 # file/directory manipulation
@@ -127,6 +130,14 @@ function zipr() {
   zip -r $1.zip $1
 }
 
+
+################################################################
+# apache
+################################################################
+
+alias ael='tail -f /var/log/apache2/error_log'
+alias aal='tail -f /var/log/apache2/access_log'
+alias ars='sudo apachectl restart'
 
 ################################################################
 # processor and cpu
@@ -180,6 +191,16 @@ alias r="rake"
 # use readline, completion and require rubygems by default for irb
 alias irb='irb --simple-prompt -r irb/completion -rubygems'
 
+function console  {
+    if [ -f "config.ru" ]; then
+        racksh
+    elif [ -f "script/console" ]; then
+        script/console
+    else
+        irb --simple-prompt -r irb/completion -rubygems
+    fi
+}
+
 # really awesome function, use: cdgem <gem name>, cd's into your gems directory
 # and opens gem that best matches the gem name provided
 function cdgem {
@@ -192,10 +213,20 @@ function gemdoc {
     open $GEMDIR/`ls $GEMDIR | grep $1 | sort | tail -1`/rdoc/index.html
 }
 
+ruby_or_irb () {
+  if [ "$1" == "" ]; then
+    irb
+  else
+    ruby "$@"
+  fi
+}
+
+#alias ruby="ruby_or_irb"
+
 alias qri='qri -w 106'
 alias fri='fri -w 106'
-
-
+alias gem?="gem list | grep $1"
+alias route?="rake routes | ack $1"
 
 ################################################################
 # rails
@@ -209,14 +240,15 @@ alias sst='kill `cat tmp/pids/mongrel.pid`' # stop daemonized Mongrel
 alias a='autotest -rails'
 alias fix='rake spec:db:fixtures:load'
 alias tl='tail -f log/development.log'
-alias tlog='tail -f log/development.log'
 alias migrate='rake db:migrate db:test:clone'
 alias rst='touch tmp/restart.txt'
-alias f='cucumber features -n'
+alias cuke='cucumber $1'
 
-# see http://railstips.org/2007/5/31/even-edgier-than-edge-rails
-function edgie() {
-    ruby ~/projects/rails/rails/railties/bin/rails $1 && cd $1 && ln -s ~/projects/rails/rails vendor/rails
+# Create a new project using Mike Gunderloy's BigOldRailsTemplate
+function railsapp {
+  appname=$1
+  shift 1
+  rails $appname -m ~/Workspace/active/BigOldRailsTemplate/lark_template.rb $@
 }
 
 ################################################################
@@ -225,7 +257,6 @@ function edgie() {
 
 alias pgstart="su - postgres -c '/usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l logfile start'"
 alias pgstop="su - postgres -c '/usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data stop'"
-
 
 ################################################################
 # misc
@@ -242,8 +273,7 @@ function markdown() {
 }
 
 # Function which adds an alias to the current shell and to the ~/.bash_aliases file.
-function add-alias ()
-{
+function add-alias () {
     local name=$1 value="$2"
     echo "alias $name='$value'" >> ~/.bash_aliases
     eval "alias $name='$value'"
@@ -266,7 +296,11 @@ function zero() {
 }
 
 # create a terminal calculator - http://www.shell-fu.org/lister.php?id=216
-function calc(){ echo "${1}"|bc -l; }
+function calc(){ 
+  #echo "${1}"|bc -l; 
+  echo "scale=2; $@" | /usr/bin/bc -l
+  return $?
+}
 
 # commands starting with % for pasting from web
 alias %=' '
