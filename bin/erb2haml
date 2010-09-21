@@ -1,0 +1,8 @@
+#!/bin/bash
+for erb_file in `find app/views -name *.html.erb`; do
+  if [ -f $erb_file ] ; then
+    name=${erb_file%\.html.erb};
+    html2haml ${erb_file} > ${name}.html.haml;
+    rm $erb_file
+  fi;
+done

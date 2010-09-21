@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+require 'yaml'
+require 'erb'
+
+current_env = ARGV[0] || ENV["RAILS_ENV"]
+require 'config/boot'
+current = YAML::load(ERB.new(IO.read('config/database.yml')).result)[current_env]
+password_part = "-p#{current['password']}" if current['password']
+cmd = "mysql -u #{current["username"]} #{password_part} #{current["database"]}"
+
+puts cmd
+system cmd

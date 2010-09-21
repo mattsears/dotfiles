@@ -1,0 +1,4 @@
+#!/bin/sh
+export SRC=/Users/matt/src
+export MARKDOWW=$SRC/Markdown.pl
+perl $MARKDOWN
