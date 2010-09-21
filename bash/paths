@@ -1,7 +1,7 @@
 #JRuby
 export PATH=$HOME/bin/jruby/bin:$PATH
 
-export PATH="/usr/bin;/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:~/bin:/usr/local/pgsql/bin:$PATH"
+export PATH="/usr/bin;/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:~/dotfiles/bin:/usr/local/pgsql/bin:$PATH"
 export MANPATH="/usr/local/man:/usr/local/mysql/man:/usr/local/git/man:$MANPATH"
 export PATH=/opt/local/bin:/opt/local/sbin:$PATH
 export PATH=/Developer/SDKs/Flex/bin:$PATH

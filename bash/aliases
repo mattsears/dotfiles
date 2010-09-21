@@ -7,7 +7,7 @@
 # Finder
 alias o='open . &'
 alias sf='open -a Safari'
-
+alias ql='qlmanage -p 2>/dev/null'
 alias texclean='rm -f *.toc *.aux *.log *.cp *.fn *.tp *.vr *.pg *.ky'
 alias clean='echo -n "Really clean this directory?";
   read yorn;
@@ -79,7 +79,7 @@ td(){
 ################################################################
 
 # changing directory to code project
-function work { cd ~/Workspace/active/$1; }
+function work { cd ~/Workspace/$1; }
 
 # cd
 alias ..='cd ..'
@@ -138,6 +138,7 @@ function zipr() {
 alias ael='tail -f /var/log/apache2/error_log'
 alias aal='tail -f /var/log/apache2/access_log'
 alias ars='sudo apachectl restart'
+alias rr="touch tmp/restart.txt"
 
 ################################################################
 # processor and cpu
@@ -150,6 +151,7 @@ alias tm='top -o vsize' # memory
 # git
 ################################################################
 
+alias git=hub
 alias gl='git pull'
 alias gp='git push'
 alias gd='git diff'
@@ -158,6 +160,7 @@ alias gca='git commit -v -a'
 alias gb='git branch -v'
 alias gs='git status'
 alias ungit="find . -name '.git' -exec rm -rf {} \;"
+alias glog='git log --pretty=format:"%ar: %s"'
 
 function gco {
     if [ -z "$1" ]; then
@@ -221,8 +224,6 @@ ruby_or_irb () {
   fi
 }
 
-#alias ruby="ruby_or_irb"
-
 alias qri='qri -w 106'
 alias fri='fri -w 106'
 alias gem?="gem list | grep $1"
@@ -235,14 +236,13 @@ alias route?="rake routes | ack $1"
 alias sc='script/console'
 alias ss='script/server' # start up the beast; use "ss -d" to detach
 alias sg='script/generate'
-alias sr='kill -USR2 `cat tmp/pids/mongrel.pid`' # restart daemonized Mongrel
-alias sst='kill `cat tmp/pids/mongrel.pid`' # stop daemonized Mongrel
 alias a='autotest -rails'
 alias fix='rake spec:db:fixtures:load'
 alias tl='tail -f log/development.log'
 alias migrate='rake db:migrate db:test:clone'
 alias rst='touch tmp/restart.txt'
 alias cuke='cucumber $1'
+alias remigrate='rake db:migrate --trace && rake db:migrate:redo --trace && rake db:schema:dump db:test:prepare'
 
 # Create a new project using Mike Gunderloy's BigOldRailsTemplate
 function railsapp {
@@ -258,9 +258,19 @@ function railsapp {
 alias pgstart="su - postgres -c '/usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l logfile start'"
 alias pgstop="su - postgres -c '/usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data stop'"
 
+
+################################################################
+# Heroku
+################################################################
+
+alias hero="ruby ~/dotfiles/bin/hero.rb"
+
 ################################################################
 # misc
 ################################################################
+
+# Web server from anywhere - taken from http://gist.github.com/573586
+alias serve="ruby -rwebrick -e\"s = WEBrick::HTTPServer.new(:Port => 3000, :DocumentRoot => Dir.pwd); trap('INT') { s.shutdown }; s.start\""
 
 # Csh compatability:
 alias unsetenv=unset
@@ -296,17 +306,11 @@ function zero() {
 }
 
 # create a terminal calculator - http://www.shell-fu.org/lister.php?id=216
-function calc(){ 
-  #echo "${1}"|bc -l; 
+function calc(){
+  #echo "${1}"|bc -l;
   echo "scale=2; $@" | /usr/bin/bc -l
   return $?
 }
 
 # commands starting with % for pasting from web
 alias %=' '
-
-# From Chris Wanstrath
-function pless() {
-    pygmentize $1 | less -r
-}
-
