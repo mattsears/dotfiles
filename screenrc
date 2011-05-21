@@ -1,17 +1,26 @@
 shell -${SHELL}
-#term              xterm-256color
-term              xterm
+term              xterm-256color
+#term              xterm
+
+# ===============================================================
+# ESCAPE - the COMMAND CHARACTER
+# ===============================================================
+# escape ^aa  # default
+# escape ^pp  # suggested binding for emacs users
+
 # terminfo and termcap for nice 256 color terminal
 # # allow bold colors - necessary for some reason
 attrcolor b ".I"
-# # tell screen how to set colors. AB = background, AF=foreground
-termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
-
+termcapinfo xterm* ti@:te@
 defbce "on"
-#
 startup_message   off
+defscrollback 30000
+autodetach on
 
-defscrollback 5000
+#
+# Run a screensaver if there's nothing happening for a while.
+#
+idle 420 eval "screen cmatrix -f -o -u 10" "idle 0"
 
 hardstatus on
 hardstatus alwayslastline
@@ -19,21 +28,56 @@ hardstatus alwayslastline
 # greyscale window list with datetime at right
 hardstatus string '%{= dK}%-Lw%{= dW}%50>%n%f* %t%{= dK}%+Lw%< %{= kG}%-=%D %d %M %Y %c:%s%{-}'
 
-screen -t database 5
+# ===============================================================
+# Key bindings
+# ===============================================================
+
+escape ^Xx
+
+bindkey -k k7 prev
+bindkey -k k9 next
+bindkey "^[Od" prev  # change window with ctrl-left
+bindkey "^[Oc" next  # change window with ctrl-right
+
+bind ' ' windowlist -b
+bind \\ quit
+
+# ===============================================================
+# STARTUP of programs in an extra window:
+# ===============================================================
+# Automatically let SCREEN start some programs in the given window numbers:
+
+screen -t ssh 6
+stuff "cd $SCREENPWD\012"
 stuff "clear\012"
+
+screen -t database 5
+stuff "cd $SCREENPWD\012"
+stuff "clear\012"
+#stuff "dbconsole\012"
 
 screen -t logs 4
-stuff "clear\012"
+stuff "cd $SCREENPWD\012"
+stuff "tail -f log/development.log\012"
 
-screen -t consl 3
+screen -t console 3
+stuff "cd $SCREENPWD\012"
 stuff "clear\012"
+#stuff "console\012"
 
 screen -t tests 2
+stuff "cd $SCREENPWD\012"
+stuff "clear\012"
 
-screen -t bash 1
+screen -t gaurd 1
+stuff "cd $SCREENPWD\012"
+stuff "clear\012"
+stuff "guard\012"
 
-screen -t server 0
-
-defscrollback 5000
+screen -t bash 0
+stuff "cd $SCREENPWD\012"
+stuff "clear\012"
 
 altscreen on
+
+
