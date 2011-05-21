@@ -1,0 +1,70 @@
+################################################################################
+# NANO Settings - Optimized for composing email
+################################################################################
+
+# Use bold text instead of reverse video text.
+set boldtext
+
+# Set the line length for wrapping text and justifying paragraphs.
+# If fill is 0 or less, the line length will be the screen
+# width less this number.
+set fill 72
+
+# The opening and closing brackets that can be found by bracket
+# searches.  They cannot contain blank characters.  The former set must
+# come before the latter set, and both must be in the same order.
+set matchbrackets "(<[{)>]}"
+
+# Enable mouse support, if available for your system.  When enabled,
+# mouse clicks can be used to place the cursor, set the mark (with a
+# double click), and execute shortcuts.  The mouse will work in the X
+# Window System, and on the console when gpm is running.
+set mouse
+
+# Don't add newlines to the ends of files.
+set nonewlines
+
+## Force wrap text
+unset nowrap
+set autoindent
+set multibuffer
+set smarthome
+set tabstospaces
+
+## Do extended regular expression searches by default.
+set regexp
+
+## Use this spelling checker instead of the internal one.  This option
+## does not properly have a default value.
+set speller "aspell -x -c"
+
+## Allow nano to be suspended.
+set suspend
+
+## Use this tab size instead of the default; it must be greater than 0.
+set tabsize 2
+
+## Convert typed tabs to spaces.
+set tabstospaces
+
+## Save automatically on exit, don't prompt.
+set tempfile
+
+## The two single-column characters used to display the first characters
+## of tabs and spaces.  187 in ISO 8859-1 (0000BB in Unicode) and 183 in
+## ISO-8859-1 (0000B7 in Unicode) seem to be good values for these.
+set whitespace ". "
+
+## Detect word boundaries more accurately by treating punctuation
+## characters as part of a word.
+set wordbounds
+
+# Key bindings
+#bind '<' 'firstline'
+#bind '>' 'lastline'
+
+set brackets "')>]}"
+
+# syntax "mutt"
+syntax "mutt"
+color brightblack "^>.*"
