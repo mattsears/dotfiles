@@ -1,1 +1,4 @@
+
 ssh/config
+mutt/cache/*
+mutt/tmp/*
