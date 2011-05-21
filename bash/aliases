@@ -1,13 +1,24 @@
 #!/usr/bin/env sh
 
 ################################################################
+# General helpers
+################################################################
+
+alias reload='. ~/.bash_profile'
+alias m='mate'
+alias e='aquamacs'
+
+# Rename the current tab in Terminal or iTerm
+function nametab(){
+    echo -ne "\033]0;"$1"\007"
+}
+
+################################################################
 # files and directories
 ################################################################
 
 # Finder
 alias o='open . &'
-alias sf='open -a Safari'
-alias ql='qlmanage -p 2>/dev/null'
 alias texclean='rm -f *.toc *.aux *.log *.cp *.fn *.tp *.vr *.pg *.ky'
 alias clean='echo -n "Really clean this directory?";
   read yorn;
@@ -28,13 +39,24 @@ alias dir='ls -la'
 alias ld='ls -al -d * | egrep "^d"' # only subdirectories
 alias lt='ls -alt | head -20' # recently changed files
 
+################################################################
+# file/directory navigation
+################################################################
+
 alias md='mkdir -p'
 alias rd=rmdir
 alias ..='cd ..'
 alias ...='cd ../..'
+alias mkdir='mkdir -p $1'
+alias rm='rm -Rf $1'
+alias sym='ln -s $2 $1'
 
-# misc
-alias reload='. ~/.bash_profile'
+# changing directory to code project
+function work { cd ~/Workspace/$1; }
+
+################################################################
+# File/directory manipulation
+################################################################
 
 # directory tree - http://www.shell-fu.org/lister.php?id=209
 alias dirf='find . -type d | sed -e "s/[^-][^\/]*\//  |/g" -e "s/|\([^ ]\)/|-\1/"'
@@ -62,49 +84,17 @@ function compare(){
     comm $1 $2 | perl -pe 's/^/1: /g;s/1: \t/2: /g;s/2: \t/A: /g;' | sort
 }
 
-# keep your home directory organised - http://www.shell-fu.org/lister.php?id=310
-export TD="$HOME/temp/`date +'%Y-%m-%d'`"
-td(){
-    td=$TD
-    if [ ! -z "$1" ]; then
-        td="$HOME/temp/`date -d "$1 days" +'%Y-%m-%d'`";
-    fi
-    mkdir -p $td; cd $td
-    unset td
-}
-
-
-################################################################
-# file/directory navigation
-################################################################
-
-# changing directory to code project
-function work { cd ~/Workspace/$1; }
-
-# cd
-alias ..='cd ..'
-alias cdw='cd ~/Workspace/active'
-alias cdd='cd ~/Documents'
-alias cddt='cd ~/Desktop'
-alias mkdir='mkdir -p $1'
-alias rm='rm -Rf $1'
-alias sym='ln -s $2 $1'
-
-################################################################
-# file/directory manipulation
-################################################################
-
 # copy and paste from the command line - http://www.shell-fu.org/lister.php?id=177
-function  ccopy(){ cp $1 /tmp/ccopy.$1; }
+function ccopy(){ cp $1 /tmp/ccopy.$1; }
 alias cpaste="ls /tmp/ccopy* | sed 's|[^\.]*.\.||' | xargs -I % mv /tmp/ccopy.% ./%"
 
-alias e='exit'
+# alias e='exit'
 alias k9="killall -9"
 function killnamed () {
     ps ax | grep $1 | cut -d ' ' -f 2 | xargs kill
 }
 
-# bash function to decompress archives - http://www.shell-fu.org/lister.php?id=375
+# bash function to decompress archives for any type - http://www.shell-fu.org/lister.php?id=375
 function extract () {
     if [ -f $1 ] ; then
         case $1 in
@@ -130,7 +120,6 @@ function zipr() {
   zip -r $1.zip $1
 }
 
-
 ################################################################
 # apache
 ################################################################
@@ -138,7 +127,6 @@ function zipr() {
 alias ael='tail -f /var/log/apache2/error_log'
 alias aal='tail -f /var/log/apache2/access_log'
 alias ars='sudo apachectl restart'
-alias rr="touch tmp/restart.txt"
 
 ################################################################
 # processor and cpu
@@ -159,6 +147,7 @@ alias gc='git commit -v'
 alias gca='git commit -v -a'
 alias gb='git branch -v'
 alias gs='git status'
+alias gco='git checkout'
 alias ungit="find . -name '.git' -exec rm -rf {} \;"
 alias glog='git log --pretty=format:"%ar: %s"'
 
@@ -179,6 +168,12 @@ function st {
 }
 
 ################################################################
+# bundler
+################################################################
+
+alias b=bundle
+
+################################################################
 # svn
 ################################################################
 
@@ -191,16 +186,44 @@ alias svnaddall='svn status | grep "^\?" | awk "{print \$2}" | xargs svn add' # 
 ################################################################
 
 alias r="rake"
-# use readline, completion and require rubygems by default for irb
 alias irb='irb --simple-prompt -r irb/completion -rubygems'
+alias rr="rake db:reset"
+alias ts='thin start'
 
+# Try to determine the type of ruby console to load
 function console  {
-    if [ -f "config.ru" ]; then
-        racksh
-    elif [ -f "script/console" ]; then
+    if [ -f "script/console" ]; then
         script/console
+    elif [ -f "script/rails" ]; then
+        rails console
+    elif [ -f "config.ru" ]; then
+        racksh
     else
         irb --simple-prompt -r irb/completion -rubygems
+    fi
+}
+
+function dbconsole {
+    if [ -f "script/server" ]; then
+        script/dbconsole -p
+    elif [ -f "script/rails" ]; then
+        rails dbconsole  -p
+    fi
+}
+
+function server {
+    if [ -f "script/server" ]; then
+        script/server
+    elif [ -f "script/rails" ]; then
+        rails server
+    fi
+}
+
+function test {
+    if [ -d "test" ]; then
+        rake test
+    elif [ -d 'spec' ]; then
+        rake spec
     fi
 }
 
@@ -211,9 +234,16 @@ function cdgem {
     cd `ls | grep $1 | sort | tail -1`
 }
 
+# Open the gem directory in your favorite editor
+function gemedit {
+    GEMDIR=`gem env gemdir`/gems
+    $EDITOR $GEMDIR/`ls $GEMDIR | grep $1 | sort | tail -1`
+}
+
+# Open the gem's readme file in your favorite editor
 function gemdoc {
-    GEMDIR=`gem env gemdir`/doc
-    open $GEMDIR/`ls $GEMDIR | grep $1 | sort | tail -1`/rdoc/index.html
+    GEMDIR=`gem env gemdir`/gems
+    $EDITOR $GEMDIR/`ls $GEMDIR | grep $1 | sort | less`README
 }
 
 ruby_or_irb () {
@@ -228,6 +258,12 @@ alias qri='qri -w 106'
 alias fri='fri -w 106'
 alias gem?="gem list | grep $1"
 alias route?="rake routes | ack $1"
+alias routes="rake routes | sed -e \"1d\" -e \"s,^[^/]*,,g\" | awk '{print $1}' | uniq | sort"
+
+# Create a new .rvmrc file and give it the name of the current directory
+function rvmrc {
+  echo "rvm $1@${PWD##*/} --create" > .rvmrc
+}
 
 ################################################################
 # rails
@@ -244,13 +280,6 @@ alias rst='touch tmp/restart.txt'
 alias cuke='cucumber $1'
 alias remigrate='rake db:migrate --trace && rake db:migrate:redo --trace && rake db:schema:dump db:test:prepare'
 
-# Create a new project using Mike Gunderloy's BigOldRailsTemplate
-function railsapp {
-  appname=$1
-  shift 1
-  rails $appname -m ~/Workspace/active/BigOldRailsTemplate/lark_template.rb $@
-}
-
 ################################################################
 # postgres
 ################################################################
@@ -258,12 +287,17 @@ function railsapp {
 alias pgstart="su - postgres -c '/usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l logfile start'"
 alias pgstop="su - postgres -c '/usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data stop'"
 
-
 ################################################################
 # Heroku
 ################################################################
 
 alias hero="ruby ~/dotfiles/bin/hero.rb"
+
+################################################################
+# screen
+################################################################
+
+alias crushit='export SCREENPWD=$(pwd); /usr/bin/screen'
 
 ################################################################
 # misc
@@ -276,10 +310,6 @@ alias serve="ruby -rwebrick -e\"s = WEBrick::HTTPServer.new(:Port => 3000, :Docu
 alias unsetenv=unset
 function setenv () {
     export $1="$2"
-}
-
-function markdown() {
-    /Applications/TextMate.app/Contents/SharedSupport/Support/bin/Markdown.pl $1 > $1.html
 }
 
 # Function which adds an alias to the current shell and to the ~/.bash_aliases file.
@@ -305,12 +335,27 @@ function zero() {
     dd ifif=/dev/zero of=$1 count=$filesize bs=1
 }
 
-# create a terminal calculator - http://www.shell-fu.org/lister.php?id=216
-function calc(){
-  #echo "${1}"|bc -l;
-  echo "scale=2; $@" | /usr/bin/bc -l
-  return $?
-}
-
 # commands starting with % for pasting from web
 alias %=' '
+
+# My very own url shortening service for littlelines
+ltlnes(){
+  URL=$1
+  API_KEY=`grep ltln.es ~/.authinfo | awk '{print $6}'`
+  SHORT_URL=`curl -s -d "url=$URL&api_key=$API_KEY" http://ltln.es/api/add`
+  echo $SHORT_URL | pbcopy
+
+  echo "-- $URL => $SHORT_URL"
+  echo "Short URL copied to clipboard."
+}
+
+# My very own url shortening service for mattsears.com
+mttsrs(){
+  URL=$1
+  API_KEY=`grep mtts.rs ~/.authinfo | awk '{print $6}'`
+  SHORT_URL=`curl -s -d "url=$URL&api_key=$API_KEY" http://mtts.rs/api/add`
+  echo $SHORT_URL | pbcopy
+
+  echo "-- $URL => $SHORT_URL"
+  echo "Short URL copied to clipboard."
+}
