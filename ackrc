@@ -16,5 +16,8 @@
 # Haml
 --type-set=haml=.haml
 
+# Coffeescript
+--type-set=coffeescript=.coffee
+
 --smart-case
 --follow
