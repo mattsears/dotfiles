@@ -1,5 +1,8 @@
 #!/usr/bin/ruby
 require 'rubygems'
+require 'rubygems' unless defined? Gem # rubygems is only needed in 1.8
+# require 'irbtools'
+
 require "ap"
 require 'hirb'; Hirb::View.enable
 require 'irb/completion'
@@ -9,6 +12,9 @@ IRB.conf[:SAVE_HISTORY] = 1000
 IRB.conf[:HISTORY_FILE] = "#{ENV['HOME']}/.irb_history"
 IRB.conf[:PROMPT_MODE] = :SIMPLE
 IRB.conf[:AUTO_INDENT] = true
+# IRB.conf[:PROMPT_MODE] = :RAILS
+IRB.conf[:PROMPT][:CUSTOM] = "%N(%m):%03n:%i %~> ".tap {|s| def s.dup; gsub('%~', Dir.pwd); end }
+
 IRB::Irb.class_eval do
   def output_value
     ap @context.last_value
@@ -16,6 +22,7 @@ IRB::Irb.class_eval do
 end
 
 class Object
+
   # list methods which aren't in superclass
   def local_methods(obj = self)
     (obj.methods - obj.class.superclass.instance_methods).sort
@@ -51,7 +58,6 @@ class Object
 
 end
 
-
 def copy(str)
   IO.popen('pbcopy', 'w') { |f| f << str.to_s }
 end
@@ -62,9 +68,8 @@ end
 
 alias q exit
 
-if ENV.include?('RAILS_ENV') && !Object.const_defined?('RAILS_DEFAULT_LOGGER')
-  require 'logger'
-  RAILS_DEFAULT_LOGGER = Logger.new(STDOUT)
+if(defined? ActiveRecord) then
+  ActiveRecord::Base.logger = Logger.new(STDOUT)
 end
 
 load File.dirname(__FILE__) + '/.railsrc' if $0 == 'irb' && ENV['RAILS_ENV']
