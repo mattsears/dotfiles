@@ -11,13 +11,24 @@
 	commit = normal
 [alias]
 	co = checkout
+  st = status
+  ci = commit
+  w = whatchanged
+  # show full history in gitk (including "deleted" branches and stashes)
+  history-all = !gitk --all $( git fsck | awk '/dangling commit/ {print $3}' )
+[web]
+	browser = open
+[gui]
+	fontdiff = -family Monaco -size 13 -weight normal -slant roman -underline 0 -overstrike 0
 [apply]
-	whitespace = nowarn
+  whitespace = fix
 [core]
-  excludesfile = /Users/matt/.gitignore
-  editor = mate -w
+  excludesfile = ~/.gitignore
+  editor = aquamacs -w
 [mirror]
   summary = true
 [github]
   user = mattsears
-  token = d42ba02798aee843c445a7e003a28e8e	
+  token = d42ba02798aee843c445a7e003a28e8e
+[core]
+  excludesfile = /Users/matt/.gitignore
