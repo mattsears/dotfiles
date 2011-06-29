@@ -14,20 +14,4 @@ fi
 
 source /Users/matt/.profile
 
-if [ -s ~/.rvm/scripts/rvm ] ; then source ~/.rvm/scripts/rvm ; fi
-	
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
-
-#eval `dircolors -b ~/dotfiles/bash/colors | grep -v alias`
-
-# if the dircolors utility is available, set that up to
-#dircolors="$(type -P gdircolors dircolors | head -1)"
-#test -n "$dircolors" && {
-#  COLORS=/etc/DIR_COLORS
-#	test -e "/etc/DIR_COLORS.$TERM"   && COLORS="/etc/DIR_COLORS.$TERM"
-#	test -e "$HOME/dircolors"        && COLORS="$HOME/dircolors"
-#	test ! -e "$COLORS"               && COLORS=
-#	eval `$dircolors --sh $COLORS`
-#}
-#unset dircolors
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
