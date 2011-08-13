@@ -1,6 +1,5 @@
 shell -${SHELL}
 term              xterm-256color
-#term              xterm
 
 # ===============================================================
 # ESCAPE - the COMMAND CHARACTER
@@ -11,11 +10,14 @@ term              xterm-256color
 # terminfo and termcap for nice 256 color terminal
 # # allow bold colors - necessary for some reason
 attrcolor b ".I"
+# termcapinfo xterm-color|xterm|xterms|xs|rxvt ti@:te@
 termcapinfo xterm* ti@:te@
 defbce "on"
 startup_message   off
 defscrollback 30000
-autodetach on
+autodetach off
+
+# Make xterm scrolling work properly with screen.
 
 #
 # Run a screensaver if there's nothing happening for a while.
