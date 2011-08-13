@@ -1,3 +1,4 @@
+source ~/.bash/colors
 source ~/.bash/env
 source ~/.bash/config
 source ~/.bash/aliases
