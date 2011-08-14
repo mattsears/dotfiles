@@ -1,23 +1,13 @@
 #!/usr/bin/env sh
 
-################################################################
-# General helpers
-################################################################
-
+# Helpers
+#
 alias reload='. ~/.bash_profile'
 alias m='mate'
 alias e='aquamacs'
 
-# Rename the current tab in Terminal or iTerm
-function nametab(){
-    echo -ne "\033]0;"$1"\007"
-}
-
-################################################################
-# files and directories
-################################################################
-
-# Finder
+# Files and directories
+#
 alias o='open . &'
 alias texclean='rm -f *.toc *.aux *.log *.cp *.fn *.tp *.vr *.pg *.ky'
 alias clean='echo -n "Really clean this directory?";
@@ -39,10 +29,7 @@ alias dir='ls -la'
 alias ld='ls -al -d * | egrep "^d"' # only subdirectories
 alias lt='ls -alt | head -20' # recently changed files
 
-################################################################
-# file/directory navigation
-################################################################
-
+# File/directory navigation
 alias md='mkdir -p'
 alias rd=rmdir
 alias ..='cd ..'
@@ -51,94 +38,39 @@ alias mkdir='mkdir -p $1'
 alias rm='rm -Rf $1'
 alias sym='ln -s $2 $1'
 
-# changing directory to code project
-function work { cd ~/Workspace/$1; }
-
-################################################################
-# File/directory manipulation
-################################################################
-
-# directory tree - http://www.shell-fu.org/lister.php?id=209
+# Directory tree - http://www.shell-fu.org/lister.php?id=209
 alias dirf='find . -type d | sed -e "s/[^-][^\/]*\//  |/g" -e "s/|\([^ ]\)/|-\1/"'
 
-#calendar with today highlighted - http://www.shell-fu.org/lister.php?id=210
+# Calendar with today highlighted - http://www.shell-fu.org/lister.php?id=210
 alias tcal='cal | sed "s/^/ /;s/$/ /;s/ $(date +%e) / $(date +%e | sed '\''s/./#/g'\'') /"'
 
-# count files by type - http://www.shell-fu.org/lister.php?id=173
+# Count files by type - http://www.shell-fu.org/lister.php?id=173
 alias ftype='find ${*-.} -type f | xargs file | awk -F, '\''{print $1}'\'' | awk '\''{$1=NULL;print $0}'\'' | sort | uniq -c | sort -nr'
 
-# convert permissions to octal - http://www.shell-fu.org/lister.php?id=205
-alias lo='ls -l | sed -e 's/--x/1/g' -e 's/-w-/2/g' -e 's/-wx/3/g' -e 's/r--/4/g' -e 's/r-x/5/g' -e 's/rw-/6/g' -e 's/rwx/7/g' -e 's/---/0/g''
-
-# get an ordered list of subdirectory sizes - http://www.shell-fu.org/lister.php?id=275
-alias dux='du -sk ./* | sort -n | awk '\''BEGIN{ pref[1]="K"; pref[2]="M"; pref[3]="G";} { total = total + $1; x = $1; y = 1; while( x > 1024 ) { x = (x + 1023)/1024; y++; } printf("%g%s\t%s\n",int(x*10)/10,pref[y],$2); } END { y = 1; while( total > 1024 ) { total = (total + 1023)/1024; y++; } printf("Total: %g%s\n",int(total*10)/10,pref[y]); }'\'''
-
-# create directory and cd into that directory
+# Create directory and cd into that directory
 function take() {
     mkdir -p "$1"
     cd "$1"
 }
 
-#compare files using comm (requires perl) - http://www.shell-fu.org/lister.php?id=186
-function compare(){
-    comm $1 $2 | perl -pe 's/^/1: /g;s/1: \t/2: /g;s/2: \t/A: /g;' | sort
+# Publish ssh key on remote server
+function authme() {
+    ssh $1 'cat >>.ssh/authorized_keys' <~/.ssh/id_rsa.pub
 }
 
-# copy and paste from the command line - http://www.shell-fu.org/lister.php?id=177
-function ccopy(){ cp $1 /tmp/ccopy.$1; }
-alias cpaste="ls /tmp/ccopy* | sed 's|[^\.]*.\.||' | xargs -I % mv /tmp/ccopy.% ./%"
-
-# alias e='exit'
-alias k9="killall -9"
-function killnamed () {
-    ps ax | grep $1 | cut -d ' ' -f 2 | xargs kill
-}
-
-# bash function to decompress archives for any type - http://www.shell-fu.org/lister.php?id=375
-function extract () {
-    if [ -f $1 ] ; then
-        case $1 in
-            *.tar.bz2)   tar xvjf $1        ;;
-            *.tar.gz)    tar xvzf $1     ;;
-            *.bz2)       bunzip2 $1       ;;
-            *.rar)       unrar x $1     ;;
-            *.gz)        gunzip $1     ;;
-            *.tar)       tar xvf $1        ;;
-            *.tbz2)      tar xvjf $1      ;;
-            *.tgz)       tar xvzf $1       ;;
-            *.zip)       unzip $1     ;;
-            *.Z)         uncompress $1  ;;
-            *.7z)        7z x $1    ;;
-            *)           echo "'$1' cannot be extracted via >extract<" ;;
-        esac
-    else
-        echo "'$1' is not a valid file"
-    fi
-}
-
-function zipr() {
-  zip -r $1.zip $1
-}
-
-################################################################
-# apache
-################################################################
-
+# Apache
+#
 alias ael='tail -f /var/log/apache2/error_log'
 alias aal='tail -f /var/log/apache2/access_log'
 alias ars='sudo apachectl restart'
 
-################################################################
-# processor and cpu
-################################################################
-
+# Processor and cpu
+#
 alias tu='top -o cpu' # cpu
 alias tm='top -o vsize' # memory
 
-################################################################
-# git
-################################################################
-
+# Git
+#
 alias git=hub
 alias gl='git pull'
 alias gp='git push'
@@ -151,6 +83,7 @@ alias gco='git checkout'
 alias ungit="find . -name '.git' -exec rm -rf {} \;"
 alias glog='git log --pretty=format:"%ar: %s"'
 
+# Checkout master if no branch name given
 function gco {
     if [ -z "$1" ]; then
         git checkout master
@@ -159,80 +92,19 @@ function gco {
     fi
 }
 
-function st {
-    if [ -d ".svn" ]; then
-        svn status
-    else
-        git status
-    fi
-}
+# Bundler
+#
+alias b="bundle"
+alias be="bundle exec"
+alias bi="bundle install"
+alias bu="bundle update"
 
-################################################################
-# bundler
-################################################################
-
-alias b=bundle
-
-################################################################
-# svn
-################################################################
-
-alias sup='svn up' # trust me 3 chars makes a different
-alias svnclear='find . -name .svn -print0 | xargs -0 rm -rf' # removes all .svn folders from directory recursively
-alias svnaddall='svn status | grep "^\?" | awk "{print \$2}" | xargs svn add' # adds all unadded files
-
-################################################################
-# ruby
-################################################################
-
+# Ruby
+#
 alias r="rake"
 alias irb='irb --simple-prompt -r irb/completion -rubygems'
 alias rr="rake db:reset"
 alias ts='thin start'
-
-# Try to determine the type of ruby console to load
-function console  {
-    if [ -f "script/console" ]; then
-        script/console
-    elif [ -f "script/rails" ]; then
-        rails console
-    elif [ -f "config.ru" ]; then
-        racksh
-    else
-        irb --simple-prompt -r irb/completion -rubygems
-    fi
-}
-
-function dbconsole {
-    if [ -f "script/server" ]; then
-        script/dbconsole -p
-    elif [ -f "script/rails" ]; then
-        rails dbconsole  -p
-    fi
-}
-
-function server {
-    if [ -f "script/server" ]; then
-        script/server
-    elif [ -f "script/rails" ]; then
-        rails server
-    fi
-}
-
-function test {
-    if [ -d "test" ]; then
-        rake test
-    elif [ -d 'spec' ]; then
-        rake spec
-    fi
-}
-
-# really awesome function, use: cdgem <gem name>, cd's into your gems directory
-# and opens gem that best matches the gem name provided
-function cdgem {
-    cd `gem env gemdir`/gems
-    cd `ls | grep $1 | sort | tail -1`
-}
 
 # Open the gem directory in your favorite editor
 function gemedit {
@@ -246,14 +118,6 @@ function gemdoc {
     $EDITOR $GEMDIR/`ls $GEMDIR | grep $1 | sort | less`README
 }
 
-ruby_or_irb () {
-  if [ "$1" == "" ]; then
-    irb
-  else
-    ruby "$@"
-  fi
-}
-
 alias qri='qri -w 106'
 alias fri='fri -w 106'
 alias gem?="gem list | grep $1"
@@ -265,10 +129,8 @@ function rvmrc {
   echo "rvm $1@${PWD##*/} --create" > .rvmrc
 }
 
-################################################################
-# rails
-################################################################
-
+# Rails
+#
 alias sc='script/console'
 alias ss='script/server' # start up the beast; use "ss -d" to detach
 alias sg='script/generate'
@@ -280,82 +142,69 @@ alias rst='touch tmp/restart.txt'
 alias cuke='cucumber $1'
 alias remigrate='rake db:migrate --trace && rake db:migrate:redo --trace && rake db:schema:dump db:test:prepare'
 
-################################################################
-# postgres
-################################################################
+# Rails console
+function console  {
+    if [ -f "script/console" ]; then
+        script/console
+    elif [ -f "script/rails" ]; then
+        rails console
+    elif [ -f "config.ru" ]; then
+        racksh
+    else
+        irb --simple-prompt -r irb/completion -rubygems
+    fi
+}
 
-alias pgstart="su - postgres -c '/usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l logfile start'"
-alias pgstop="su - postgres -c '/usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data stop'"
+# Database console
+function dbconsole {
+    if [ -f "script/server" ]; then
+        script/dbconsole -p
+    elif [ -f "script/rails" ]; then
+        rails dbconsole  -p
+    fi
+}
 
-################################################################
-# Heroku
-################################################################
+# Rails server
+function server {
+    if [ -f "script/server" ]; then
+        script/server
+    elif [ -f "script/rails" ]; then
+        rails server
+    fi
+}
 
-alias hero="ruby ~/dotfiles/bin/hero.rb"
+# Run tests
+function test {
+    if [ -d "test" ]; then
+        rake test
+    elif [ -d 'spec' ]; then
+        rake spec
+    fi
+}
 
-################################################################
-# screen
-################################################################
+# Postgres
+#
+alias start_postgres="launchctl load -w ~/Library/LaunchAgents/org.postgresql.postgres.plist"
+alias stop_postgres="launchctl unload -w ~/Library/LaunchAgents/org.postgresql.postgres.plist"
 
+# MySQL
+#
+alias start_mysql="launchctl load -w ~/Library/LaunchAgents/com.mysql.mysqld.plist"
+alias stop_mysql="launchctl unload -w ~/Library/LaunchAgents/com.mysql.mysqld.plist"
+
+# Screen
+#
 alias crushit='export SCREENPWD=$(pwd); /usr/bin/screen'
 
-################################################################
-# misc
-################################################################
+# Fun stuff
+#
+
+# Changing directory to code project
+function work { cd ~/Workspace/$1; }
+function work! { cd ~/Workspace/$1 && crushit; }
 
 # Web server from anywhere - taken from http://gist.github.com/573586
 alias serve="ruby -rwebrick -e\"s = WEBrick::HTTPServer.new(:Port => 3000, :DocumentRoot => Dir.pwd); trap('INT') { s.shutdown }; s.start\""
 
-# Csh compatability:
-alias unsetenv=unset
-function setenv () {
-    export $1="$2"
-}
-
-# Function which adds an alias to the current shell and to the ~/.bash_aliases file.
-function add-alias () {
-    local name=$1 value="$2"
-    echo "alias $name='$value'" >> ~/.bash_aliases
-    eval "alias $name='$value'"
-    alias $name
-}
-
-# publish ssh key on remote server
-function authme() {
-    ssh $1 'cat >>.ssh/authorized_keys' <~/.ssh/id_rsa.pub
-}
-
-# overwrite a file with zeroes - http://www.shell-fu.org/lister.php?id=94
-function zero() {
-    case "$1" in
-        "")     echo "Usage: zero <file>"
-            return -1;
-    esac
-    filesize=`wc -c  "$1" | awk '{print $1}'`
-    dd ifif=/dev/zero of=$1 count=$filesize bs=1
-}
-
-# commands starting with % for pasting from web
-alias %=' '
-
-# My very own url shortening service for littlelines
-ltlnes(){
-  URL=$1
-  API_KEY=`grep ltln.es ~/.authinfo | awk '{print $6}'`
-  SHORT_URL=`curl -s -d "url=$URL&api_key=$API_KEY" http://ltln.es/api/add`
-  echo $SHORT_URL | pbcopy
-
-  echo "-- $URL => $SHORT_URL"
-  echo "Short URL copied to clipboard."
-}
-
-# My very own url shortening service for mattsears.com
-mttsrs(){
-  URL=$1
-  API_KEY=`grep mtts.rs ~/.authinfo | awk '{print $6}'`
-  SHORT_URL=`curl -s -d "url=$URL&api_key=$API_KEY" http://mtts.rs/api/add`
-  echo $SHORT_URL | pbcopy
-
-  echo "-- $URL => $SHORT_URL"
-  echo "Short URL copied to clipboard."
-}
+# Return my current ip address
+alias myip="curl icanhazip.com"
