@@ -1,0 +1,10 @@
+#!/bin/sh
+#
+# My very own url shortening service for littlelines
+#
+URL=$1
+API_KEY=`grep ltln.es ~/.authinfo | awk '{print $6}'`
+SHORT_URL=`curl -s -d "url=$URL&api_key=$API_KEY" http://ltln.es/api/add`
+echo $SHORT_URL | pbcopy
+echo "-- $URL => $SHORT_URL"
+echo "Short URL copied to clipboard."
