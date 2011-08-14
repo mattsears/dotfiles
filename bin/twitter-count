@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+#
+# Returns a Twitter follower count
+# Usage: twitter-count <username>
+#
+#
+require 'open-uri'
+require 'nokogiri'
+
+name = ARGV.first || begin
+  $stderr.print 'Enter your twitter name: '
+  $stdin.gets.chomp
+end
+
+$stderr.puts 'Grabbing...'
+
+html = open('http://twitter.com/' + name).read
+count = Nokogiri(html).at('#follower_count').text
+
+puts count
