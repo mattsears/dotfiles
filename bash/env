@@ -1,3 +1,5 @@
+export CLICOLOR=1
+export LSCOLORS=ExFxCxDxBxegedabagacad
 export EDITOR="aquamacs"
 export GEMEDITOR="aquamacs"
 export FLEX_HOME=/Developer/SDKs/Flex/
