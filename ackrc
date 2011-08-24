@@ -19,5 +19,9 @@
 # Coffeescript
 --type-set=coffeescript=.coffee
 
+# Ignore tmp and cache files
+--ignore-dir=tmp
+--ignore-dir=cache
+
 --smart-case
 --follow
