@@ -12,6 +12,7 @@
 
 # Sass
 --type-set=scss=.scss,.sass
+--type-set=sass=.scss,.sass
 
 # Haml
 --type-set=haml=.haml
@@ -22,6 +23,8 @@
 # Ignore tmp and cache files
 --ignore-dir=tmp
 --ignore-dir=cache
+--ignore-dir=generated
+--ignore-dir=coverage
 
 --smart-case
 --follow
