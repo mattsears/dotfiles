@@ -1,3 +1,7 @@
+# ===============================================================
+# Global Screen Configuration file
+# ===============================================================
+
 shell -${SHELL}
 term              xterm-256color
 
@@ -8,20 +12,14 @@ term              xterm-256color
 # escape ^pp  # suggested binding for emacs users
 
 # terminfo and termcap for nice 256 color terminal
-# # allow bold colors - necessary for some reason
 attrcolor b ".I"
-# termcapinfo xterm-color|xterm|xterms|xs|rxvt ti@:te@
 termcapinfo xterm* ti@:te@
 defbce "on"
 startup_message   off
 defscrollback 30000
 autodetach off
 
-# Make xterm scrolling work properly with screen.
-
-#
 # Run a screensaver if there's nothing happening for a while.
-#
 idle 420 eval "screen cmatrix -f -o -u 10" "idle 0"
 
 hardstatus on
@@ -43,43 +41,4 @@ bindkey "^[Oc" next  # change window with ctrl-right
 
 bind ' ' windowlist -b
 bind \\ quit
-
-# ===============================================================
-# STARTUP of programs in an extra window:
-# ===============================================================
-# Automatically let SCREEN start some programs in the given window numbers:
-
-screen -t ssh 6
-stuff "cd $SCREENPWD\012"
-stuff "clear\012"
-
-screen -t database 5
-stuff "cd $SCREENPWD\012"
-stuff "clear\012"
-#stuff "dbconsole\012"
-
-screen -t logs 4
-stuff "cd $SCREENPWD\012"
-stuff "tail -f log/development.log\012"
-
-screen -t console 3
-stuff "cd $SCREENPWD\012"
-stuff "clear\012"
-#stuff "console\012"
-
-screen -t tests 2
-stuff "cd $SCREENPWD\012"
-stuff "clear\012"
-
-screen -t gaurd 1
-stuff "cd $SCREENPWD\012"
-stuff "clear\012"
-stuff "guard\012"
-
-screen -t bash 0
-stuff "cd $SCREENPWD\012"
-stuff "clear\012"
-
-altscreen on
-
 

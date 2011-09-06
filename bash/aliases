@@ -192,16 +192,14 @@ alias stop_postgres="launchctl unload -w ~/Library/LaunchAgents/org.postgresql.p
 alias start_mysql="launchctl load -w ~/Library/LaunchAgents/com.mysql.mysqld.plist"
 alias stop_mysql="launchctl unload -w ~/Library/LaunchAgents/com.mysql.mysqld.plist"
 
-# Screen
+# Screens
 #
-alias crushit='export SCREENPWD=$(pwd); /usr/bin/screen'
-
-# Fun stuff
-#
+alias codeit='export SCREENPWD=$(pwd) SYSSCREENRC='~/.screenrc'; /usr/bin/screen -c ~/dotfiles/screen/coderc'
+alias homeit='export SCREENPWD=$(pwd) SYSSCREENRC='~/.screenrc'; /usr/bin/screen -c ~/dotfiles/screen/homerc'
 
 # Changing directory to code project
 function work { cd ~/Workspace/$1; }
-function work! { cd ~/Workspace/$1 && crushit; }
+function work! { cd ~/Workspace/$1 && codeit; }
 
 # Web server from anywhere - taken from http://gist.github.com/573586
 alias serve="ruby -rwebrick -e\"s = WEBrick::HTTPServer.new(:Port => 3000, :DocumentRoot => Dir.pwd); trap('INT') { s.shutdown }; s.start\""
