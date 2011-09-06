@@ -6,4 +6,4 @@ parse_git_branch() {
 }
 
 # Customize the prompt with an effen lightning bolt
-export PS1="\[$NO_COLOR\]\n\u\[$BLUE\]:\[$NO_COLOR\]\w\[$GREEN\]\$(parse_git_branch)\n\[$MAGENTA\]⚡\[$NO_COLOR\] "
+export PS1="\[$NO_COLOR\]\n\u\[$BLUE\]:\[$NO_COLOR\]\w\[$GREEN\]\$(parse_git_branch)\[$MAGENTA\]\n⚡\[$NO_COLOR\] "
