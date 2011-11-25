@@ -10,7 +10,8 @@
 # Gems
 --type-set=gemspec=.gemspec
 
-# Sass
+# Sass/CSS
+--type-set=css=.css
 --type-set=scss=.scss,.sass
 --type-set=sass=.scss,.sass
 
@@ -21,6 +22,7 @@
 --type-set=coffeescript=.coffee
 
 # Ignore tmp and cache files
+--ignore-dir=doc
 --ignore-dir=tmp
 --ignore-dir=cache
 --ignore-dir=generated
