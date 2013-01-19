@@ -5,7 +5,7 @@
 # This is config I used to start and coding related screens.
 #
 
-screen -t ssh 6
+screen -t background 6
 stuff "cd $SCREENPWD\012"
 stuff "clear\012"
 

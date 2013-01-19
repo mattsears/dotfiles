@@ -5,14 +5,14 @@
 # This is the screen session to run miscellaneous stuff.  I
 # generally keep this it open at all times.
 
-screen -t twitter 1
+screen -t twitter 2
 stuff "cd $SCREENPWD\012"
 stuff "clear\012"
 
 screen -t todos 1
 stuff "cd $SCREENPWD\012"
 stuff "clear\012"
-stuff "boom all\012"
+stuff "boom todo\012"
 
 screen -t bash 0
 stuff "cd $SCREENPWD\012"

@@ -1,0 +1,178 @@
+#!/usr/bin/env sh
+
+# ==============================================================================
+# FILE AND DIRECTORY HELPERS
+# ==============================================================================
+
+# Changing directory to code project
+function work { cd ~/Workspace/$1; }
+function work! { cd ~/Workspace/$1 && codeit; }
+
+# Create directory and cd into that directory
+function take() {
+    mkdir -p "$1"
+    cd "$1"
+}
+
+# Publish ssh key on remote server
+function authme() {
+    ssh $1 'cat >>.ssh/authorized_keys' <~/.ssh/id_rsa.pub
+}
+
+# Extract most know archives with one command
+function extract () {
+    if [ -f $1 ] ; then
+      case $1 in
+        *.tar.bz2)   tar xjf $1     ;;
+        *.tar.gz)    tar xzf $1     ;;
+        *.bz2)       bunzip2 $1     ;;
+        *.rar)       unrar e $1     ;;
+        *.gz)        gunzip $1      ;;
+        *.tar)       tar xf $1      ;;
+        *.tbz2)      tar xjf $1     ;;
+        *.tgz)       tar xzf $1     ;;
+        *.zip)       unzip $1       ;;
+        *.Z)         uncompress $1  ;;
+        *.7z)        7z x $1        ;;
+        *)     echo "'$1' cannot be extracted via extract()" ;;
+         esac
+     else
+         echo "'$1' is not a valid file"
+     fi
+}
+
+# Determine size of a file or total size of a directory
+function fs() {
+	if du -b /dev/null > /dev/null 2>&1; then
+		local arg=-sbh
+	else
+		local arg=-sh
+	fi
+	if [[ -n "$@" ]]; then
+		du $arg -- "$@"
+	else
+		du $arg .[^.]* *
+	fi
+}
+
+
+# ==============================================================================
+# GIT HELPERS
+# ==============================================================================
+
+# Checkout master if no branch name given
+function gco {
+    if [ -z "$1" ]; then
+        git checkout master
+    else
+        git checkout $1
+    fi
+}
+
+# ==============================================================================
+# RAILS HELPERS
+# ==============================================================================
+
+# Rails console
+function console  {
+    if [ -f "script/rails" ]; then
+        rails console
+    elif [ -f "script/console" ]; then
+        script/console
+    elif [ -f "config.ru" ]; then
+        racksh
+    else
+        irb --simple-prompt -r irb/completion -rubygems
+    fi
+}
+
+# Database console
+function dbconsole {
+    if [ -f "script/server" ]; then
+        script/dbconsole -p
+    elif [ -f "script/rails" ]; then
+        rails dbconsole  -p
+    fi
+}
+
+# Rails server
+function server {
+    if [ -f "script/server" ]; then
+        script/server
+    elif [ -f "script/rails" ]; then
+        rails server
+    fi
+}
+
+# Run tests
+function test {
+    if [ -d "test" ]; then
+        rake test
+    elif [ -d 'spec' ]; then
+        rake spec
+    fi
+}
+
+# Destroy all the rails log files
+function clear_all_logs {
+  base=`pwd`
+
+  for path in `find $base -type f -path '*/config/environment.rb'`
+  do
+          rails_root=`echo $path | xargs dirname | xargs dirname`
+          echo "Found RAILS_ROOT in $rails_root"
+          old_pwd=`pwd`
+          cd $rails_root
+          rm log/*.log
+          cd $old_pwd
+          echo
+  done
+}
+
+# Open the gem's readme file in your favorite editor
+function gemdoc {
+    GEMDIR=`gem env gemdir`/gems
+    $EDITOR $GEMDIR/`ls $GEMDIR | grep $1 | sort | less`README
+}
+
+# Open the gem directory in your favorite editor
+function gemedit {
+    GEMDIR=`gem env gemdir`/gems
+    $EDITOR $GEMDIR/`ls $GEMDIR | grep $1 | sort | tail -1`
+}
+
+# ==============================================================================
+# MISC HELPERS
+# ==============================================================================
+
+# Label the Terminal tab
+function title {
+  printf "\033]0;%s\007" "$1"
+}
+
+# Create a new .rvmrc file and give it the name of the current directory
+function rvmrc {
+  echo "rvm $1@${PWD##*/} --create" > .rvmrc
+}
+
+
+# Postgres equivalent to heroku db:pull.
+# Pulls latest heroku pgbackups dump into local database
+#
+# Usage:
+#
+# $ heroku_pg_pull [appname] [local database name]
+#
+function heroku_pg_pull(){
+  echo "!   WARNING: Data in the local database '$2' will be destroyed."
+  echo "    Type '$2' to overwrite data in local database '$2'"
+  read -p "> " local_database_name
+  echo
+  if [ "$local_database_name" == "$2" ]; then
+    curl -o heroku_pg_pull_latest_backup.dump `heroku pgbackups:url -a $1`;
+    pg_restore --verbose --clean --no-acl --no-owner -h localhost -U `whoami` -d $2 heroku_pg_pull_latest_backup.dump;
+    rm heroku_pg_pull_latest_backup.dump;
+  else
+    echo "Aborted"
+  fi
+}

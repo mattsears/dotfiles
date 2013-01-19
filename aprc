@@ -1,5 +1,6 @@
 #!/usr/bin/ruby
-# ~/.aprc file.
+
+# Awesome Print defaults: https://github.com/michaeldv/awesome_print
 AwesomePrint.defaults = {
   :indent => -2,
   :color => {

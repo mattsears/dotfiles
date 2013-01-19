@@ -1,7 +1,6 @@
 #!/usr/bin/ruby
 require 'rubygems'
 require 'rubygems' unless defined? Gem # rubygems is only needed in 1.8
-# require 'irbtools'
 
 require "ap"
 require 'hirb'; Hirb::View.enable
