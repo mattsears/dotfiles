@@ -1,3 +1,5 @@
+#!/usr/bin/env sh
+
 # Markdown, textile, and other text formats
 --type-set=plaintext=.md,.mdown,.markdown,.mkdn,.textile,.txt
 
@@ -5,18 +7,18 @@
 --type-set=csv=.txt,.csv,.tsv
 
 # Rubies
---type-set=ruby=.rake,.rb
+--type-set=ruby=.rake,.rb, .yml
 
 # Gems
 --type-set=gemspec=.gemspec
 
 # Sass/CSS
 --type-set=css=.css
---type-set=scss=.scss,.sass
---type-set=sass=.scss,.sass
+--type-set=scss=.scss,.sass,.css.sass
+--type-set=sass=.scss,.sass,.css.scss
 
-# Haml
---type-set=haml=.haml
+# Html Template
+--type-set=haml=.haml,.html,.slim,.erb
 
 # Coffeescript
 --type-set=coffeescript=.coffee
@@ -27,6 +29,7 @@
 --ignore-dir=cache
 --ignore-dir=generated
 --ignore-dir=coverage
-
+--ignore-dir=vendor
+--ignore-dir=i18n
 --smart-case
 --follow

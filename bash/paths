@@ -1,9 +1,11 @@
 export PATH=$HOME/bin/jruby/bin:$PATH
-export PATH="/usr/bin;/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:~/dotfiles/bin:/usr/local/pgsql/bin:$PATH"
+export PATH="/usr/bin;/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:~/dotfiles/bin:~/Workspace/active/git-timecard/bin:~/Workspace/taco/bin:~/Workspace/tweety/bin:/usr/local/pgsql/bin:$PATH"
 export MANPATH="/usr/local/man:/usr/local/mysql/man:/usr/local/git/man:$MANPATH"
 export PATH=/opt/local/bin:/opt/local/sbin:$PATH
 export MAGICK_HOME=/usr/local/include/ImageMagick
 export PATH=$MAGICK_HOME/bin:$PATH
+export NODE_PATH="/usr/local/lib/node_modules:$NODE_PATH"
 
+export PATH=$HOME/.rbenv/bin:$PATH
 if [ -s ~/.rvm/scripts/rvm ] ; then source ~/.rvm/scripts/rvm ; fi
 

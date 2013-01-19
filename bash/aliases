@@ -1,13 +1,10 @@
 #!/usr/bin/env sh
 
 # Helpers
-#
 alias reload='. ~/.bash_profile'
 alias m='mate'
-alias e='aquamacs'
 
 # Files and directories
-#
 alias o='open . &'
 alias texclean='rm -f *.toc *.aux *.log *.cp *.fn *.tp *.vr *.pg *.ky'
 alias clean='echo -n "Really clean this directory?";
@@ -28,6 +25,13 @@ alias c='clear'
 alias dir='ls -la'
 alias ld='ls -al -d * | egrep "^d"' # only subdirectories
 alias lt='ls -alt | head -20' # recently changed files
+alias lr='ls -R | grep ":$" | sed -e '\''s/:$//'\'' -e '\''s/[^-][^\/]*\//--/g'\'' -e '\''s/^/   /'\'' -e '\''s/-/|/'\'''
+
+# Spotlight search in the current directory
+alias s='mdfind -onlyin . $1'
+
+# Utilities
+alias flush='dscacheutil -flushcache' # flushes dns cache
 
 # File/directory navigation
 alias md='mkdir -p'
@@ -47,30 +51,19 @@ alias tcal='cal | sed "s/^/ /;s/$/ /;s/ $(date +%e) / $(date +%e | sed '\''s/./#
 # Count files by type - http://www.shell-fu.org/lister.php?id=173
 alias ftype='find ${*-.} -type f | xargs file | awk -F, '\''{print $1}'\'' | awk '\''{$1=NULL;print $0}'\'' | sort | uniq -c | sort -nr'
 
-# Create directory and cd into that directory
-function take() {
-    mkdir -p "$1"
-    cd "$1"
-}
-
-# Publish ssh key on remote server
-function authme() {
-    ssh $1 'cat >>.ssh/authorized_keys' <~/.ssh/id_rsa.pub
-}
+# Show which commands you use the most
+alias freq='cut -f1 -d" " ~/.bash_history | sort | uniq -c | sort -nr | head -n 30'
 
 # Apache
-#
 alias ael='tail -f /var/log/apache2/error_log'
 alias aal='tail -f /var/log/apache2/access_log'
 alias ars='sudo apachectl restart'
 
 # Processor and cpu
-#
 alias tu='top -o cpu' # cpu
 alias tm='top -o vsize' # memory
 
 # Git
-#
 alias git=hub
 alias gl='git pull'
 alias gp='git push'
@@ -81,42 +74,24 @@ alias gb='git branch -v'
 alias gs='git status'
 alias gco='git checkout'
 alias ungit="find . -name '.git' -exec rm -rf {} \;"
-alias glog='git log --pretty=format:"%ar: %s"'
+alias glog="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+alias git-undo='git reset --soft HEAD^'
 
-# Checkout master if no branch name given
-function gco {
-    if [ -z "$1" ]; then
-        git checkout master
-    else
-        git checkout $1
-    fi
-}
 
 # Bundler
-#
 alias b="bundle"
 alias be="bundle exec"
-alias bi="bundle install"
 alias bu="bundle update"
 
+# http://opensoul.org/blog/archives/2011/09/14/bundle-exec-fatigue/
+alias bi="bundle install --binstubs=.bin"
+export PATH="./.bin:$PATH"
+
 # Ruby
-#
 alias r="rake"
 alias irb='irb --simple-prompt -r irb/completion -rubygems'
 alias rr="rake db:reset"
 alias ts='thin start'
-
-# Open the gem directory in your favorite editor
-function gemedit {
-    GEMDIR=`gem env gemdir`/gems
-    $EDITOR $GEMDIR/`ls $GEMDIR | grep $1 | sort | tail -1`
-}
-
-# Open the gem's readme file in your favorite editor
-function gemdoc {
-    GEMDIR=`gem env gemdir`/gems
-    $EDITOR $GEMDIR/`ls $GEMDIR | grep $1 | sort | less`README
-}
 
 alias qri='qri -w 106'
 alias fri='fri -w 106'
@@ -124,17 +99,7 @@ alias gem?="gem list | grep $1"
 alias route?="rake routes | ack $1"
 alias routes="rake routes | sed -e \"1d\" -e \"s,^[^/]*,,g\" | awk '{print $1}' | uniq | sort"
 
-# Create a new .rvmrc file and give it the name of the current directory
-function rvmrc {
-  echo "rvm $1@${PWD##*/} --create" > .rvmrc
-}
-
 # Rails
-#
-alias sc='script/console'
-alias ss='script/server' # start up the beast; use "ss -d" to detach
-alias sg='script/generate'
-alias a='autotest -rails'
 alias fix='rake spec:db:fixtures:load'
 alias tl='tail -f log/development.log'
 alias migrate='rake db:migrate db:test:clone'
@@ -142,67 +107,22 @@ alias rst='touch tmp/restart.txt'
 alias cuke='cucumber $1'
 alias remigrate='rake db:migrate --trace && rake db:migrate:redo --trace && rake db:schema:dump db:test:prepare'
 
-# Rails console
-function console  {
-    if [ -f "script/console" ]; then
-        script/console
-    elif [ -f "script/rails" ]; then
-        rails console
-    elif [ -f "config.ru" ]; then
-        racksh
-    else
-        irb --simple-prompt -r irb/completion -rubygems
-    fi
-}
-
-# Database console
-function dbconsole {
-    if [ -f "script/server" ]; then
-        script/dbconsole -p
-    elif [ -f "script/rails" ]; then
-        rails dbconsole  -p
-    fi
-}
-
-# Rails server
-function server {
-    if [ -f "script/server" ]; then
-        script/server
-    elif [ -f "script/rails" ]; then
-        rails server
-    fi
-}
-
-# Run tests
-function test {
-    if [ -d "test" ]; then
-        rake test
-    elif [ -d 'spec' ]; then
-        rake spec
-    fi
-}
-
 # Postgres
-#
 alias start_postgres="launchctl load -w ~/Library/LaunchAgents/org.postgresql.postgres.plist"
 alias stop_postgres="launchctl unload -w ~/Library/LaunchAgents/org.postgresql.postgres.plist"
 
 # MySQL
-#
 alias start_mysql="launchctl load -w ~/Library/LaunchAgents/com.mysql.mysqld.plist"
 alias stop_mysql="launchctl unload -w ~/Library/LaunchAgents/com.mysql.mysqld.plist"
 
 # Screens
-#
 alias codeit='export SCREENPWD=$(pwd) SYSSCREENRC='~/.screenrc'; /usr/bin/screen -c ~/dotfiles/screen/coderc'
 alias homeit='export SCREENPWD=$(pwd) SYSSCREENRC='~/.screenrc'; /usr/bin/screen -c ~/dotfiles/screen/homerc'
-
-# Changing directory to code project
-function work { cd ~/Workspace/$1; }
-function work! { cd ~/Workspace/$1 && codeit; }
 
 # Web server from anywhere - taken from http://gist.github.com/573586
 alias serve="ruby -rwebrick -e\"s = WEBrick::HTTPServer.new(:Port => 3000, :DocumentRoot => Dir.pwd); trap('INT') { s.shutdown }; s.start\""
 
 # Return my current ip address
 alias myip="curl icanhazip.com"
+
+
