@@ -39,7 +39,8 @@ alias rd=rmdir
 alias ..='cd ..'
 alias ...='cd ../..'
 alias mkdir='mkdir -p $1'
-alias rm='rm -Rf $1'
+# alias rm='rm -Rf $1'
+alias rm='move_to_trash'
 alias sym='ln -s $2 $1'
 
 # Directory tree - http://www.shell-fu.org/lister.php?id=209
@@ -64,9 +65,11 @@ alias tu='top -o cpu' # cpu
 alias tm='top -o vsize' # memory
 
 # Git
-alias git=hub
+# alias git=hub
 alias gl='git pull'
+alias glm='git pull origin master'
 alias gp='git push'
+alias gpm='git push origin master'
 alias gd='git diff'
 alias gc='git commit -v'
 alias gca='git commit -v -a'
@@ -76,12 +79,16 @@ alias gco='git checkout'
 alias ungit="find . -name '.git' -exec rm -rf {} \;"
 alias glog="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias git-undo='git reset --soft HEAD^'
-
+alias grm='git rm --cached $1'
 
 # Bundler
 alias b="bundle"
 alias be="bundle exec"
 alias bu="bundle update"
+
+# Heroku
+alias hl="heroku logs --tail"
+alias hrc="heroku run console"
 
 # http://opensoul.org/blog/archives/2011/09/14/bundle-exec-fatigue/
 alias bi="bundle install --binstubs=.bin"
@@ -116,7 +123,7 @@ alias start_mysql="launchctl load -w ~/Library/LaunchAgents/com.mysql.mysqld.pli
 alias stop_mysql="launchctl unload -w ~/Library/LaunchAgents/com.mysql.mysqld.plist"
 
 # Screens
-alias codeit='export SCREENPWD=$(pwd) SYSSCREENRC='~/.screenrc'; /usr/bin/screen -c ~/dotfiles/screen/coderc'
+alias hack='export SCREENPWD=$(pwd) SYSSCREENRC='~/.screenrc'; /usr/bin/screen -c ~/dotfiles/screen/coderc'
 alias homeit='export SCREENPWD=$(pwd) SYSSCREENRC='~/.screenrc'; /usr/bin/screen -c ~/dotfiles/screen/homerc'
 
 # Web server from anywhere - taken from http://gist.github.com/573586
@@ -124,5 +131,3 @@ alias serve="ruby -rwebrick -e\"s = WEBrick::HTTPServer.new(:Port => 3000, :Docu
 
 # Return my current ip address
 alias myip="curl icanhazip.com"
-
-

@@ -4,9 +4,13 @@
 # FILE AND DIRECTORY HELPERS
 # ==============================================================================
 
+move_to_trash () {
+    mv -f "$@" ~/.trash
+}
+
 # Changing directory to code project
 function work { cd ~/Workspace/$1; }
-function work! { cd ~/Workspace/$1 && codeit; }
+function work! { cd ~/Workspace/$1 && hack; }
 
 # Create directory and cd into that directory
 function take() {
