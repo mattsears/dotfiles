@@ -1,8 +1,0 @@
-#!/bin/sh
-#
-# Run `list` to see all the scripts in ~/dotfiles/bin directory.
-#
-for i in `ls ~/dotfiles/bin`
-do
-echo "$i"
-done

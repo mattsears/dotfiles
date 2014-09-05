@@ -16,7 +16,7 @@ attrcolor b ".I"
 termcapinfo xterm* ti@:te@
 defbce "on"
 startup_message   off
-defscrollback 30000
+defscrollback 100000
 autodetach off
 
 # Run a screensaver if there's nothing happening for a while.
@@ -41,4 +41,3 @@ bindkey "^[Oc" next  # change window with ctrl-right
 
 bind ' ' windowlist -b
 bind \\ quit
-

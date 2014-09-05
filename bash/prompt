@@ -1,0 +1,47 @@
+export TERM=xterm-256color
+
+# Did we make any changes?
+function __git_dirty {
+  git diff --quiet HEAD &>/dev/null
+  [ $? == 1 ] && echo "!"
+}
+
+# Get the current branch
+function __parse_git_branch() {
+  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/[\1]/'
+}
+
+# Get the current rvm version and gemset
+function __my_rvm_ruby_version {
+  local gemset=$(echo $GEM_HOME | awk -F'@' '{print $2}')
+  [ "$gemset" != "" ] && gemset="@$gemset"
+  local version=$(echo $MY_RUBY_HOME | awk -F'-' '{print $2}')
+  [ "$version" == "1.8.7" ] && version=""
+  local full="$version$gemset"
+  [ "$full" != "" ] && echo "$full "
+}
+
+# Get the current rbenv verions and gemset
+
+function __my_ruby_prompt() {
+  if [ -f ".rbenv-version" ]; then
+     echo "ruby: `rbenv version-name`(`rbenv gemset active`)"
+  elif [ -f ".ruby-version" ]; then
+     echo "ruby: `rbenv version-name`(`rbenv gemset active`)"
+  fi
+}
+
+bash_prompt() {
+  local UC=$W                 # user's color
+  [ $UID -eq "0" ] && UC=$R   # root's color
+
+  local SPARKLES=✨
+  local PANDA=🐼
+  local BOLT=⚡
+  local LAMBDA=λ
+
+  PS1="\[\033[G\]\[$BLUE\]\n$LAMBDA\[$BLUE\]:\[$NO_COLOR\]\W\[$GREEN\]\$(__parse_git_branch)\$(__git_dirty) \[$GRAY\]$(__my_ruby_prompt)\[$PURPLE\]\n↪\[$NO_COLOR\] "
+}
+
+bash_prompt
+unset bash_prompt

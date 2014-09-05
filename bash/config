@@ -1,9 +1,0 @@
-TERM=xterm-256color
-
-# Get the current branch
-parse_git_branch() {
-  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/[\1]/'
-}
-
-# Customize the prompt with an effen lightning bolt
-export PS1="\[\033[G\]\[$NO_COLOR\]\n\u\[$BLUE\]:\[$NO_COLOR\]\w\[$GREEN\]\$(parse_git_branch)\[$BLUE\] ⚡ \[$GRAY\]$(~/.rvm/bin/rvm-prompt)\[$MAGENTA\]\n↪\[$NO_COLOR\] "

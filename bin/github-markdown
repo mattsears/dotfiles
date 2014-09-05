@@ -1,0 +1,8 @@
+#!/bin/bash
+#
+# Bash wrapper for github-markdown.rb to force rvm to use ruby 1.9.3 and global gemset
+# Not sure of a better way to do this.
+#
+export GEM_PATH=/Users/matt/.rvm/gems/ruby-1.9.3-p0:/Users/matt/.rvm/gems/ruby-1.9.3-p0@global
+export GEM_HOME=/Users/matt/.rvm/gems/ruby-1.9.3-p0
+cat - | /Users/matt/dotfiles/bin/github-markdown.rb

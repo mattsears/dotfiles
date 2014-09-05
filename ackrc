@@ -27,9 +27,12 @@
 --ignore-dir=doc
 --ignore-dir=tmp
 --ignore-dir=cache
+--ignore-dir=.cask
+--ignore-dir=elpa
 --ignore-dir=generated
 --ignore-dir=coverage
 --ignore-dir=vendor
 --ignore-dir=i18n
+--ignore-dir=log
 --smart-case
 --follow

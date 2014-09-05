@@ -20,6 +20,11 @@ IRB::Irb.class_eval do
   end
 end
 
+AwesomePrint::OPTIONS.merge!(
+  :multiline => true,
+  :indent => 2
+)
+
 class Object
 
   # list methods which aren't in superclass
@@ -72,5 +77,3 @@ if(defined? ActiveRecord) then
 end
 
 load File.dirname(__FILE__) + '/.railsrc' if $0 == 'irb' && ENV['RAILS_ENV']
-
-

@@ -18,3 +18,5 @@ set convert-meta off
 "\e[6~": end-of-history
 
 set show-all-if-ambiguous on
+set completion-query-items 100
+set page-completions off

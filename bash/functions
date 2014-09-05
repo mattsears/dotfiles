@@ -9,8 +9,8 @@ move_to_trash () {
 }
 
 # Changing directory to code project
+function w { cd ~/Workspace/$1; }
 function work { cd ~/Workspace/$1; }
-function work! { cd ~/Workspace/$1 && hack; }
 
 # Create directory and cd into that directory
 function take() {
@@ -47,16 +47,16 @@ function extract () {
 
 # Determine size of a file or total size of a directory
 function fs() {
-	if du -b /dev/null > /dev/null 2>&1; then
-		local arg=-sbh
-	else
-		local arg=-sh
-	fi
-	if [[ -n "$@" ]]; then
-		du $arg -- "$@"
-	else
-		du $arg .[^.]* *
-	fi
+  if du -b /dev/null > /dev/null 2>&1; then
+    local arg=-sbh
+  else
+    local arg=-sh
+  fi
+  if [[ -n "$@" ]]; then
+    du $arg -- "$@"
+  else
+    du $arg .[^.]* *
+  fi
 }
 
 
@@ -136,13 +136,13 @@ function clear_all_logs {
 # Open the gem's readme file in your favorite editor
 function gemdoc {
     GEMDIR=`gem env gemdir`/gems
-    $EDITOR $GEMDIR/`ls $GEMDIR | grep $1 | sort | less`README
+    open -a $EDITOR $GEMDIR/`ls $GEMDIR | grep $1 | sort | less`README
 }
 
 # Open the gem directory in your favorite editor
 function gemedit {
     GEMDIR=`gem env gemdir`/gems
-    $EDITOR $GEMDIR/`ls $GEMDIR | grep $1 | sort | tail -1`
+    open -a $EDITOR $GEMDIR/`ls $GEMDIR | grep $1 | sort | tail -1`
 }
 
 # ==============================================================================
@@ -159,6 +159,11 @@ function rvmrc {
   echo "rvm $1@${PWD##*/} --create" > .rvmrc
 }
 
+function rvm () {
+    if [[ $1 == 'use' ]]; then
+        rbenv shell $2
+    fi
+}
 
 # Postgres equivalent to heroku db:pull.
 # Pulls latest heroku pgbackups dump into local database
@@ -178,5 +183,57 @@ function heroku_pg_pull(){
     rm heroku_pg_pull_latest_backup.dump;
   else
     echo "Aborted"
+  fi
+}
+
+
+# Add reminder to Reminders.app (OS X 10.8)
+# Usage: `remind 'foo'` or `echo 'foo' | remind`
+function remind() {
+  local text
+  if [ -t 0 ]; then
+    text="$1" # argument
+  else
+    text=$(cat) # pipe
+  fi
+  osascript >/dev/null <<EOF
+tell application "Reminders"
+  tell the default list
+    make new reminder with properties {name:"$text"}
+  end tell
+end tell
+EOF
+}
+
+# Display all the colors available using tputs
+function print_colors() {
+    ( x=`tput op` y=`printf %$((${COLUMNS}-6))s`;for i in {0..256};do o=00$i;echo -e ${o:${#o}-3:3} `tput setaf $i;tput setab $i`${y// /=}$x;done; )
+}
+
+# Creates a quick Sinatra app using jet-pack
+function jp()
+{
+  if [ "$1" == "" ]; then
+    echo "Usage:  jp <YOUR-APP-NAME>"
+  else
+    git clone git://github.com/raul/jet-pack.git $1
+    cd $1
+    rm -rf .git
+    bundle
+    git init .
+    git add *
+    git add .gitignore
+    git commit -a -m"jet-pack boilerplate"
+    ./extra/pull_foundation_all.sh
+  fi
+}
+
+function fu() {
+  killall -9 $2;
+  if [ $? == 0 ]
+  then
+    echo
+    echo " (╯°□°）╯︵$(echo $2|flip &2>/dev/null)"
+    echo
   fi
 }

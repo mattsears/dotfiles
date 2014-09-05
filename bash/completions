@@ -3,8 +3,8 @@
 source ~/.bash/completion_scripts/git_completion
 
 complete -C ~/.bash/completion_scripts/rake_completion -o default rake
-complete -C ~/.bash/completion_scripts/project_completion -o default work
-complete -C ~/.bash/completion_scripts/project_completion -o default work!
+complete -C ~/.bash/completion_scripts/project_completion -o default w
+complete -C ~/.bash/completion_scripts/project_completion -o default w!
 complete -C ~/.bash/completion_scripts/capistrano_completion -o default cap
 
 # Completions for SSH known_hosts and config hosts

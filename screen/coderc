@@ -4,32 +4,30 @@
 #
 # This is config I used to start and coding related screens.
 #
-
-screen -t background 6
+screen -t server 6
 stuff "cd $SCREENPWD\012"
 stuff "clear\012"
 
-screen -t database 5
+screen -t background 5
 stuff "cd $SCREENPWD\012"
 stuff "clear\012"
 
-screen -t logs 4
+screen -t database 4
+stuff "cd $SCREENPWD\012"
+stuff "clear\012"
+
+screen -t logs 3
 stuff "cd $SCREENPWD\012"
 stuff "tail -f log/development.log\012"
 
-screen -t console 3
+screen -t console 2
 stuff "cd $SCREENPWD\012"
 stuff "clear\012"
-stuff "console\012"
+#stuff "console\012"
 
-screen -t tests 2
+screen -t tests 1
 stuff "cd $SCREENPWD\012"
 stuff "clear\012"
-
-screen -t gaurd 1
-stuff "cd $SCREENPWD\012"
-stuff "clear\012"
-stuff "guard\012"
 
 screen -t bash 0
 stuff "cd $SCREENPWD\012"

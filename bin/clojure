@@ -1,9 +1,0 @@
-#!/bin/sh
-export SRC=/Users/matt/src
-export CLOJURE=$SRC/clojure
-export CLASSPATH=$CLOJURE/trunk/clojure.jar:$CLOJURE/clojure-contrib/clojure-contrib.jar
-for file in $SRC/jars/*.jar; do
-    JARS=$JARS:$file
-done
-CLASSPATH=$CLASSPATH$JARS
-java -cp $CLASSPATH jline.ConsoleRunner clojure.lang.Repl

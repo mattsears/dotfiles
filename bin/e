@@ -14,9 +14,11 @@
 # $ e /usr/local
 # # => opens the specified directory in your editor
 
+#!/bin/bash
+
 if test "$1" == ""
 then
-  exec $EDITOR .
+  open -a $EDITOR .
 else
-  exec $EDITOR "$1"
+  open -a $EDITOR $1
 fi

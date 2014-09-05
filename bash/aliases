@@ -40,7 +40,7 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias mkdir='mkdir -p $1'
 # alias rm='rm -Rf $1'
-alias rm='move_to_trash'
+# alias rm='move_to_trash'
 alias sym='ln -s $2 $1'
 
 # Directory tree - http://www.shell-fu.org/lister.php?id=209
@@ -68,6 +68,7 @@ alias tm='top -o vsize' # memory
 # alias git=hub
 alias gl='git pull'
 alias glm='git pull origin master'
+alias glr='git pull --rebase'
 alias gp='git push'
 alias gpm='git push origin master'
 alias gd='git diff'
@@ -85,6 +86,11 @@ alias grm='git rm --cached $1'
 alias b="bundle"
 alias be="bundle exec"
 alias bu="bundle update"
+
+# Attempts to fix LibXml warning messages
+alias gem_nokogiri="gem install nokogiri -- --with-xml2-include=/usr/local/Cellar/libxml2/2.9.1/include/libxml2 --with-xml2-lib=/usr/local/Cellar/libxml2/2.9.1/lib --with-xslt-dir=/usr/local/Cellar/libxslt/1.1.26"
+
+alias z="zeus"
 
 # Heroku
 alias hl="heroku logs --tail"
@@ -114,6 +120,12 @@ alias rst='touch tmp/restart.txt'
 alias cuke='cucumber $1'
 alias remigrate='rake db:migrate --trace && rake db:migrate:redo --trace && rake db:schema:dump db:test:prepare'
 
+# Rbenv
+alias rb='rbenv'
+alias rbr='rbenv rehash'
+alias rbv='rbenv version'
+alias rbg='rbenv gemset active'
+
 # Postgres
 alias start_postgres="launchctl load -w ~/Library/LaunchAgents/org.postgresql.postgres.plist"
 alias stop_postgres="launchctl unload -w ~/Library/LaunchAgents/org.postgresql.postgres.plist"
@@ -130,4 +142,14 @@ alias homeit='export SCREENPWD=$(pwd) SYSSCREENRC='~/.screenrc'; /usr/bin/screen
 alias serve="ruby -rwebrick -e\"s = WEBrick::HTTPServer.new(:Port => 3000, :DocumentRoot => Dir.pwd); trap('INT') { s.shutdown }; s.start\""
 
 # Return my current ip address
-alias myip="curl icanhazip.com"
+alias myip="ipconfig getifaddr en0 && curl icanhazip.com"
+
+# Emacs
+alias emc="/usr/local/Cellar/emacs/24.3/bin/emacsclient"
+alias emacs="open -a /usr/local/Cellar/emacs/24.3/Emacs.app/Contents/MacOS/Emacs $1"
+
+# Tmux
+alias tmka="tx ls | awk '{print $1}' | sed 's/://g' | xargs -I{} tmux kill-session -t {}"
+alias tml="tmux list-sessions"
+alias tma="tmux -2 attach -t $1"
+alias tmk="tmux kill-session -t $1"
