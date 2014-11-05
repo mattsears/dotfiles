@@ -4,11 +4,14 @@ set -sg escape-time 0
 # Use vim keybindings in copy mode
 setw -g mode-keys vi
 
+set-option -g terminal-overrides '*88col*:colors=88,*256col*:colors=256,xterm*:XT:Ms=\E]52;%p1%s;%p2%s\007:Cs=\E]12;%p1%s\007:Cr=\E]112\007:Ss=\E]50;CursorShape=%?%p1%{3}%<%t%{0}%e%p1%{2}%-%;%d\007'
+
 bind h select-pane -L
 bind j select-pane -D
 bind k select-pane -U
 bind l select-pane -R
-bind c send-keys -R
+
+bind z send-keys -R \; clear-history
 
 bind-key -r C-h select-window -t :-
 bind-key -r C-l select-window -t :+
@@ -49,6 +52,8 @@ unbind '"'
 bind | split-window -h
 bind - split-window -v
 bind N previous-window
+
+set -g default-command "reattach-to-user-namespace -l bash"
 
 # Setup 'v' to begin selection as in Vim
 bind-key -t vi-copy v begin-selection

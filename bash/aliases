@@ -153,3 +153,4 @@ alias tmka="tx ls | awk '{print $1}' | sed 's/://g' | xargs -I{} tmux kill-sessi
 alias tml="tmux list-sessions"
 alias tma="tmux -2 attach -t $1"
 alias tmk="tmux kill-session -t $1"
+alias tmn="tmux new -s $1"

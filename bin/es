@@ -20,5 +20,6 @@ if [ "t" == "$(server_ok)" ]; then
   emacsclient -e '(kill-emacs)'
   exec /usr/local/Cellar/emacs/24.3/Emacs.app/Contents/MacOS/Emacs --daemon
 else
-  echo "Emacs server not running"
+  echo "Emacs server not running. Starting now...."
+  exec /usr/local/Cellar/emacs/24.3/Emacs.app/Contents/MacOS/Emacs --daemon
 fi
