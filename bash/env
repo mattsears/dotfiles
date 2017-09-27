@@ -2,8 +2,7 @@
 
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
-# export EDITOR="open -a /usr/local/Cellar/emacs/24.3/Emacs.app/Contents/MacOS/Emacs $1"
-export EDITOR="et"
+export EDITOR="e"
 
 export GEMEDITOR="Emacs"
 export TERM="xterm-color"
@@ -17,12 +16,5 @@ export PGDATA=/usr/local/pgsql/data
 export RACK_ENV="development"
 export FTP_PASSIVE=1
 export RSENSE_HOME=/usr/local/lib/rsense-0.3
-
-# export RUBY_HEAP_MIN_SLOTS=800000
-# export RUBY_HEAP_SLOTS_INCREMENT=300000
-# export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1
-# export RUBY_HEAP_FREE_MIN=100000
-# export RUBY_GC_MALLOC_LIMIT=60000000
-# export RUBY_FREE_MIN=200000
-
-export CC=/usr/local/bin/gcc-4.2
+export CC=/usr/bin/gcc
+export HTML_TIDY="$HOME/.tidyrc"

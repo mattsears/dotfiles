@@ -59,6 +59,9 @@ function fs() {
   fi
 }
 
+function clobber_ds_stores {
+    find . -name ".DS_Store" -print0 | xargs -0 rm -rf
+}
 
 # ==============================================================================
 # GIT HELPERS

@@ -2,7 +2,6 @@
 
 # Helpers
 alias reload='. ~/.bash_profile'
-alias m='mate'
 
 # Files and directories
 alias o='open . &'
@@ -39,8 +38,6 @@ alias rd=rmdir
 alias ..='cd ..'
 alias ...='cd ../..'
 alias mkdir='mkdir -p $1'
-# alias rm='rm -Rf $1'
-# alias rm='move_to_trash'
 alias sym='ln -s $2 $1'
 
 # Directory tree - http://www.shell-fu.org/lister.php?id=209
@@ -90,12 +87,6 @@ alias bu="bundle update"
 # Attempts to fix LibXml warning messages
 alias gem_nokogiri="gem install nokogiri -- --with-xml2-include=/usr/local/Cellar/libxml2/2.9.1/include/libxml2 --with-xml2-lib=/usr/local/Cellar/libxml2/2.9.1/lib --with-xslt-dir=/usr/local/Cellar/libxslt/1.1.26"
 
-alias z="zeus"
-
-# Heroku
-alias hl="heroku logs --tail"
-alias hrc="heroku run console"
-
 # http://opensoul.org/blog/archives/2011/09/14/bundle-exec-fatigue/
 alias bi="bundle install --binstubs=.bin"
 export PATH="./.bin:$PATH"
@@ -103,32 +94,31 @@ export PATH="./.bin:$PATH"
 # Ruby
 alias r="rake"
 alias irb='irb --simple-prompt -r irb/completion -rubygems'
-alias rr="rake db:reset"
-alias ts='thin start'
 
 alias qri='qri -w 106'
 alias fri='fri -w 106'
 alias gem?="gem list | grep $1"
-alias route?="rake routes | ack $1"
-alias routes="rake routes | sed -e \"1d\" -e \"s,^[^/]*,,g\" | awk '{print $1}' | uniq | sort"
 
 # Rails
+alias route?="rake routes | ack $1"
+alias routes="rake routes | sed -e \"1d\" -e \"s,^[^/]*,,g\" | awk '{print $1}' | uniq | sort"
 alias fix='rake spec:db:fixtures:load'
 alias tl='tail -f log/development.log'
 alias migrate='rake db:migrate db:test:clone'
 alias rst='touch tmp/restart.txt'
-alias cuke='cucumber $1'
 alias remigrate='rake db:migrate --trace && rake db:migrate:redo --trace && rake db:schema:dump db:test:prepare'
 
-# Rbenv
-alias rb='rbenv'
-alias rbr='rbenv rehash'
-alias rbv='rbenv version'
-alias rbg='rbenv gemset active'
+alias reset="bundle exec rake reset"
 
 # Postgres
 alias start_postgres="launchctl load -w ~/Library/LaunchAgents/org.postgresql.postgres.plist"
 alias stop_postgres="launchctl unload -w ~/Library/LaunchAgents/org.postgresql.postgres.plist"
+
+alias psqll="psql -U matt -l"
+alias psqld="psql -U matt -d $1"
+alias psqlx="dropdb -U matt $1"
+alias psqlc="createdb -O matt -T $1 $2"
+alias psqln="createdb -O matt $1"
 
 # MySQL
 alias start_mysql="launchctl load -w ~/Library/LaunchAgents/com.mysql.mysqld.plist"
@@ -145,8 +135,8 @@ alias serve="ruby -rwebrick -e\"s = WEBrick::HTTPServer.new(:Port => 3000, :Docu
 alias myip="ipconfig getifaddr en0 && curl icanhazip.com"
 
 # Emacs
-alias emc="/usr/local/Cellar/emacs/24.3/bin/emacsclient"
-alias emacs="open -a /usr/local/Cellar/emacs/24.3/Emacs.app/Contents/MacOS/Emacs $1"
+alias emc="/usr/local/Cellar/emacs/25.2-rc2/bin/emacsclient"
+alias et="e $1"
 
 # Tmux
 alias tmka="tx ls | awk '{print $1}' | sed 's/://g' | xargs -I{} tmux kill-session -t {}"
@@ -154,3 +144,5 @@ alias tml="tmux list-sessions"
 alias tma="tmux -2 attach -t $1"
 alias tmk="tmux kill-session -t $1"
 alias tmn="tmux new -s $1"
+
+alias mux="tmuxinator $1"

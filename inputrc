@@ -19,4 +19,5 @@ set convert-meta off
 
 set show-all-if-ambiguous on
 set completion-query-items 100
+set completion-ignore-case on
 set page-completions off

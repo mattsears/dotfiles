@@ -3,6 +3,7 @@
 .svn
 *~
 .bin
+.env
 TAGS
 GTAGS
 GPATH

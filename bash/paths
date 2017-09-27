@@ -9,7 +9,8 @@ export PATH=$MAGICK_HOME/bin:$PATH
 export NODE_PATH="/usr/local/lib/node_modules:$NODE_PATH"
 export JRUBY_OPTS="-Xcext.enabled=true"
 
-export GOPATH=$HOME/Workspace/active/golang
-export PATH=$PATH:$GOPATH/bin
+export EMACS="/usr/local/Cellar/emacs/25.2-rc2/bin/emacs"
+export PATH=$PATH:/usr/local/opt/go/libexec/bin
 export PATH=$HOME/.cask/bin:$PATH
 export PATH="./bin:$PATH"
+export PATH="$(brew --prefix qt@5.5)/bin:$PATH"

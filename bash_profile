@@ -11,7 +11,7 @@ source ~/.bash/paths
 
 source ~/dotfiles/bin/terminal_tab_colors
 source /Users/matt/.profile
-source "`brew --prefix grc`/etc/grc.bashrc"
+# source "`brew --prefix grc`/etc/grc.bashrc"
 
 eval "$(rbenv init -)"
 # set -o vi

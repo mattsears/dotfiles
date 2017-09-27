@@ -39,10 +39,11 @@ set -g status-left ''
 set -g status-right ''
 
 # increase scrollback lines
-set -g history-limit 10000
+set -g history-limit 100000
 
 # improve colors
-set -g default-terminal 'screen-256color'
+# set -g default-terminal 'screen-256color'
+set -g default-terminal "xterm-256color"
 
 # Local config
 if-shell "[ -f ~/.tmux.conf.local ]" 'source ~/.tmux.conf.local'

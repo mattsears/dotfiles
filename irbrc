@@ -2,8 +2,6 @@
 require 'rubygems'
 require 'rubygems' unless defined? Gem # rubygems is only needed in 1.8
 
-require "ap"
-require 'hirb'; Hirb::View.enable
 require 'irb/completion'
 require 'irb/ext/save-history'
 
@@ -11,19 +9,38 @@ IRB.conf[:SAVE_HISTORY] = 1000
 IRB.conf[:HISTORY_FILE] = "#{ENV['HOME']}/.irb_history"
 IRB.conf[:PROMPT_MODE] = :SIMPLE
 IRB.conf[:AUTO_INDENT] = true
-# IRB.conf[:PROMPT_MODE] = :RAILS
 IRB.conf[:PROMPT][:CUSTOM] = "%N(%m):%03n:%i %~> ".tap {|s| def s.dup; gsub('%~', Dir.pwd); end }
 
 IRB::Irb.class_eval do
   def output_value
-    ap @context.last_value
+    if defined? AwesomePrint
+      ap @context.last_value
+    else
+      p @context.last_value
+    end
   end
 end
 
-AwesomePrint::OPTIONS.merge!(
-  :multiline => true,
-  :indent => 2
-)
+
+# begin
+#   require 'wirble'
+#   Wirble.init
+#   Wirble.colorize
+# rescue LoadError => err
+# end
+
+# begin
+#   require 'hirb'
+#   Hirb.enable :output => {"ActiveRecord::Base" => {:class => :auto_table, :ancestor => true, :options => {:vertical => true}}}
+# rescue LoadError => err
+#   warn "Couldn't load Hirb : #{err}"
+# end
+
+require "ap" unless defined? AwesomePrint
+if defined? AwesomePrint
+  # AwesomePrint.irb!
+  AwesomePrint.pry!
+end
 
 class Object
 

@@ -39,8 +39,9 @@ bash_prompt() {
   local PANDA=🐼
   local BOLT=⚡
   local LAMBDA=λ
+  local SUN=☀️
 
-  PS1="\[\033[G\]\[$BLUE\]\n$LAMBDA\[$BLUE\]:\[$NO_COLOR\]\W\[$GREEN\]\$(__parse_git_branch)\$(__git_dirty) \[$GRAY\]$(__my_ruby_prompt)\[$PURPLE\]\n↪\[$NO_COLOR\] "
+  PS1="\[\033[G\]\[$BLUE\]\n$BOLT \[$BLUE\]:\[$NO_COLOR\]\W\[$GREEN\]\$(__parse_git_branch)\$(__git_dirty) \[$GRAY\]$(__my_ruby_prompt)\[$PURPLE\]\n↪\[$NO_COLOR\] "
 }
 
 bash_prompt
