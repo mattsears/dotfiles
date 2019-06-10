@@ -20,8 +20,15 @@ _site/*
 *.gem
 *.thor
 bundle/**/*
-
 coverage/*
+
+---------
+| Rails |
+---------
+*.gem
+*.thor
+public/system/**/*
+*.rdb
 
 --------
 | Vim  |

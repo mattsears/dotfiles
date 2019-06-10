@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
 
 source ~/.bash/completion_scripts/git_completion
+source ~/.bash/completion_scripts/tmuxinator.bash
 
 complete -C ~/.bash/completion_scripts/rake_completion -o default rake
 complete -C ~/.bash/completion_scripts/project_completion -o default w

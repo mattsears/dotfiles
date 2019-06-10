@@ -9,10 +9,13 @@ source ~/.bash/functions
 source ~/.bash/completions
 source ~/.bash/paths
 
-source ~/dotfiles/bin/terminal_tab_colors
 source /Users/matt/.profile
-# source "`brew --prefix grc`/etc/grc.bashrc"
 
 eval "$(rbenv init -)"
-# set -o vi
 eval "$(direnv hook bash)"
+eval "$(thefuck --alias)"
+
+# OPAM configuration
+. /Users/matt/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true
+
+export PATH="$HOME/.cargo/bin:$PATH"

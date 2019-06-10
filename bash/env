@@ -2,8 +2,8 @@
 
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
-export EDITOR="e"
-
+export EDITOR=" /Users/matt/dotfiles/bin/e"
+export VISUAL=$EDITOR
 export GEMEDITOR="Emacs"
 export TERM="xterm-color"
 export RSPEC=true
@@ -18,3 +18,4 @@ export FTP_PASSIVE=1
 export RSENSE_HOME=/usr/local/lib/rsense-0.3
 export CC=/usr/bin/gcc
 export HTML_TIDY="$HOME/.tidyrc"
+export ANSIBLE_CONFIG=~/.ansible/ansible.cfg

@@ -26,37 +26,37 @@ function authme() {
 # Extract most know archives with one command
 function extract () {
     if [ -f $1 ] ; then
-      case $1 in
-        *.tar.bz2)   tar xjf $1     ;;
-        *.tar.gz)    tar xzf $1     ;;
-        *.bz2)       bunzip2 $1     ;;
-        *.rar)       unrar e $1     ;;
-        *.gz)        gunzip $1      ;;
-        *.tar)       tar xf $1      ;;
-        *.tbz2)      tar xjf $1     ;;
-        *.tgz)       tar xzf $1     ;;
-        *.zip)       unzip $1       ;;
-        *.Z)         uncompress $1  ;;
-        *.7z)        7z x $1        ;;
-        *)     echo "'$1' cannot be extracted via extract()" ;;
-         esac
-     else
-         echo "'$1' is not a valid file"
-     fi
+        case $1 in
+            *.tar.bz2)   tar xjf $1     ;;
+            *.tar.gz)    tar xzf $1     ;;
+            *.bz2)       bunzip2 $1     ;;
+            *.rar)       unrar e $1     ;;
+            *.gz)        gunzip $1      ;;
+            *.tar)       tar xf $1      ;;
+            *.tbz2)      tar xjf $1     ;;
+            *.tgz)       tar xzf $1     ;;
+            *.zip)       unzip $1       ;;
+            *.Z)         uncompress $1  ;;
+            *.7z)        7z x $1        ;;
+            *)     echo "'$1' cannot be extracted via extract()" ;;
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
 }
 
 # Determine size of a file or total size of a directory
 function fs() {
-  if du -b /dev/null > /dev/null 2>&1; then
-    local arg=-sbh
-  else
-    local arg=-sh
-  fi
-  if [[ -n "$@" ]]; then
-    du $arg -- "$@"
-  else
-    du $arg .[^.]* *
-  fi
+    if du -b /dev/null > /dev/null 2>&1; then
+        local arg=-sbh
+    else
+        local arg=-sh
+    fi
+    if [[ -n "$@" ]]; then
+        du $arg -- "$@"
+    else
+        du $arg .[^.]* *
+    fi
 }
 
 function clobber_ds_stores {
@@ -122,51 +122,49 @@ function test {
 
 # Destroy all the rails log files
 function clear_all_logs {
-  base=`pwd`
+    base=`pwd`
 
-  for path in `find $base -type f -path '*/config/environment.rb'`
-  do
-          rails_root=`echo $path | xargs dirname | xargs dirname`
-          echo "Found RAILS_ROOT in $rails_root"
-          old_pwd=`pwd`
-          cd $rails_root
-          rm log/*.log
-          cd $old_pwd
-          echo
-  done
+    for path in `find $base -type f -path '*/config/environment.rb'`
+    do
+        rails_root=`echo $path | xargs dirname | xargs dirname`
+        echo "Found RAILS_ROOT in $rails_root"
+        old_pwd=`pwd`
+        cd $rails_root
+        rm log/*.log
+        cd $old_pwd
+        echo
+    done
+}
+
+# Removes all the gems from .rbenv folders. EEK
+function clear_all_rbenvs {
+    RBENVPATH=`rbenv root`
+    echo $RBENVPATH
+    RUBIES=`ls $RBENVPATH/versions`
+
+    for ruby in $RUBIES; do
+        echo '---------------------------------------'
+        echo $ruby
+        # rbenv local $ruby
+        # uninstall
+    done
 }
 
 # Open the gem's readme file in your favorite editor
 function gemdoc {
     GEMDIR=`gem env gemdir`/gems
-    open -a $EDITOR $GEMDIR/`ls $GEMDIR | grep $1 | sort | less`README
+    $EDITOR $GEMDIR/`ls $GEMDIR | grep $1 | sort | less`README
 }
 
 # Open the gem directory in your favorite editor
 function gemedit {
     GEMDIR=`gem env gemdir`/gems
-    open -a $EDITOR $GEMDIR/`ls $GEMDIR | grep $1 | sort | tail -1`
+    $EDITOR $GEMDIR/`ls $GEMDIR | grep $1 | sort | tail -1`
 }
 
 # ==============================================================================
 # MISC HELPERS
 # ==============================================================================
-
-# Label the Terminal tab
-function title {
-  printf "\033]0;%s\007" "$1"
-}
-
-# Create a new .rvmrc file and give it the name of the current directory
-function rvmrc {
-  echo "rvm $1@${PWD##*/} --create" > .rvmrc
-}
-
-function rvm () {
-    if [[ $1 == 'use' ]]; then
-        rbenv shell $2
-    fi
-}
 
 # Postgres equivalent to heroku db:pull.
 # Pulls latest heroku pgbackups dump into local database
@@ -176,30 +174,30 @@ function rvm () {
 # $ heroku_pg_pull [appname] [local database name]
 #
 function heroku_pg_pull(){
-  echo "!   WARNING: Data in the local database '$2' will be destroyed."
-  echo "    Type '$2' to overwrite data in local database '$2'"
-  read -p "> " local_database_name
-  echo
-  if [ "$local_database_name" == "$2" ]; then
-    curl -o heroku_pg_pull_latest_backup.dump `heroku pgbackups:url -a $1`;
-    pg_restore --verbose --clean --no-acl --no-owner -h localhost -U `whoami` -d $2 heroku_pg_pull_latest_backup.dump;
-    rm heroku_pg_pull_latest_backup.dump;
-  else
-    echo "Aborted"
-  fi
+    echo "!   WARNING: Data in the local database '$2' will be destroyed."
+    echo "    Type '$2' to overwrite data in local database '$2'"
+    read -p "> " local_database_name
+    echo
+    if [ "$local_database_name" == "$2" ]; then
+        curl -o heroku_pg_pull_latest_backup.dump `heroku pgbackups:url -a $1`;
+        pg_restore --verbose --clean --no-acl --no-owner -h localhost -U `whoami` -d $2 heroku_pg_pull_latest_backup.dump;
+        rm heroku_pg_pull_latest_backup.dump;
+    else
+        echo "Aborted"
+    fi
 }
 
 
 # Add reminder to Reminders.app (OS X 10.8)
 # Usage: `remind 'foo'` or `echo 'foo' | remind`
 function remind() {
-  local text
-  if [ -t 0 ]; then
-    text="$1" # argument
-  else
-    text=$(cat) # pipe
-  fi
-  osascript >/dev/null <<EOF
+    local text
+    if [ -t 0 ]; then
+        text="$1" # argument
+    else
+        text=$(cat) # pipe
+    fi
+    osascript >/dev/null <<EOF
 tell application "Reminders"
   tell the default list
     make new reminder with properties {name:"$text"}
@@ -213,30 +211,30 @@ function print_colors() {
     ( x=`tput op` y=`printf %$((${COLUMNS}-6))s`;for i in {0..256};do o=00$i;echo -e ${o:${#o}-3:3} `tput setaf $i;tput setab $i`${y// /=}$x;done; )
 }
 
-# Creates a quick Sinatra app using jet-pack
-function jp()
-{
-  if [ "$1" == "" ]; then
-    echo "Usage:  jp <YOUR-APP-NAME>"
-  else
-    git clone git://github.com/raul/jet-pack.git $1
-    cd $1
-    rm -rf .git
-    bundle
-    git init .
-    git add *
-    git add .gitignore
-    git commit -a -m"jet-pack boilerplate"
-    ./extra/pull_foundation_all.sh
-  fi
+function fu() {
+    killall -9 $2;
+    if [ $? == 0 ]
+    then
+        echo
+        echo " (╯°□°）╯︵$(echo $2|flip &2>/dev/null)"
+        echo
+    fi
 }
 
-function fu() {
-  killall -9 $2;
-  if [ $? == 0 ]
-  then
-    echo
-    echo " (╯°□°）╯︵$(echo $2|flip &2>/dev/null)"
-    echo
-  fi
+# Quickly fire up project with emacs in the current directory
+function ep  {
+    clear
+    if [ -f "README.md" ]; then
+        e README.md
+    elif [ -f "init.el" ]; then
+        e init.el
+    elif [ -f "Gemfile" ]; then
+        e Gemfile
+    elif [ -f "gulpfile.js" ]; then
+        e gulpfile.js
+    elif [ -f "README.adoc" ]; then
+        e README.adoc
+    else
+        echo "¯\_(ツ)_/¯"
+    fi
 }

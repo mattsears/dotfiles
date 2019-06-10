@@ -1,47 +1,38 @@
 export TERM=xterm-256color
+export FIRE=🔥
+export SPARKLES=✨
+export PANDA=🐼
+export BOLT=⚡
+export LAMBDA=λ
+export SUN=☀️
 
 # Did we make any changes?
 function __git_dirty {
-  git diff --quiet HEAD &>/dev/null
-  [ $? == 1 ] && echo "!"
+    git diff --quiet HEAD &>/dev/null
+    [ $? == 1 ] && echo "$SPARKLES"
 }
 
 # Get the current branch
 function __parse_git_branch() {
-  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/[\1]/'
-}
-
-# Get the current rvm version and gemset
-function __my_rvm_ruby_version {
-  local gemset=$(echo $GEM_HOME | awk -F'@' '{print $2}')
-  [ "$gemset" != "" ] && gemset="@$gemset"
-  local version=$(echo $MY_RUBY_HOME | awk -F'-' '{print $2}')
-  [ "$version" == "1.8.7" ] && version=""
-  local full="$version$gemset"
-  [ "$full" != "" ] && echo "$full "
+    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/[\1]/'
 }
 
 # Get the current rbenv verions and gemset
-
 function __my_ruby_prompt() {
-  if [ -f ".rbenv-version" ]; then
-     echo "ruby: `rbenv version-name`(`rbenv gemset active`)"
-  elif [ -f ".ruby-version" ]; then
-     echo "ruby: `rbenv version-name`(`rbenv gemset active`)"
-  fi
+    if [ -f ".rbenv-version" ]; then
+        echo "ruby: `rbenv version-name`(`rbenv gemset active`)"
+    elif [ -f ".ruby-version" ]; then
+        echo "ruby: `rbenv version-name`(`rbenv gemset active`)"
+    else
+        ""
+    fi
 }
 
 bash_prompt() {
-  local UC=$W                 # user's color
-  [ $UID -eq "0" ] && UC=$R   # root's color
+    local UC=$W                 # user's color
+    [ $UID -eq "0" ] && UC=$R   # root's color
 
-  local SPARKLES=✨
-  local PANDA=🐼
-  local BOLT=⚡
-  local LAMBDA=λ
-  local SUN=☀️
-
-  PS1="\[\033[G\]\[$BLUE\]\n$BOLT \[$BLUE\]:\[$NO_COLOR\]\W\[$GREEN\]\$(__parse_git_branch)\$(__git_dirty) \[$GRAY\]$(__my_ruby_prompt)\[$PURPLE\]\n↪\[$NO_COLOR\] "
+    PS1="\[\033[G\]\[$BLUE\]\n$FIRE \[$BLUE\]\[$NO_COLOR\]\W\[$PURPLE\]\$(__parse_git_branch)\$(__git_dirty) \[$GRAY\]$(__my_ruby_prompt)\[$PURPLE\]\n↪\[$NO_COLOR\] "
 }
 
 bash_prompt

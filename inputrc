@@ -17,7 +17,11 @@ set convert-meta off
 "\e[5~": beginning-of-history
 "\e[6~": end-of-history
 
-set show-all-if-ambiguous on
-set completion-query-items 100
+# allows history search that starts with first character
+# "\e[A": history-search-backward            # arrow up
+# "\e[B": history-search-forward
+
+set show-all-if-ambiguous off
+set completion-query-items 0
 set completion-ignore-case on
 set page-completions off

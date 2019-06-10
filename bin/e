@@ -20,4 +20,4 @@
 # can also pass in -n if you want to have the shell return right away
 
 #exec emacsclient -a "" -t "$@"
-exec /usr/local/Cellar/emacs/25.2-rc2/bin/emacsclient -a "" -t "$@" 
+exec /usr/local/Cellar/emacs-plus/26.1/bin/emacsclient -a "" -t "$@" 

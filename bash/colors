@@ -2,32 +2,33 @@ NO_COLOR='\e[0m' #disable any colors
 NO_COLOUR="\[\033[0m\]"
 
 if tput setaf 1 &> /dev/null; then
-	tput sgr0
-	if [[ $(tput colors) -ge 256 ]] 2>/dev/null; then
-		MAGENTA=$(tput setaf 90)
-		ORANGE=$(tput setaf 172)
-		GREEN=$(tput setaf 119)
-		PURPLE=$(tput setaf 141)
-		BLUE=$(tput setaf 33)
-		WHITE=$(tput setaf 0)
-		GRAY=$(tput setaf 8)
-	else
-		MAGENTA=$(tput setaf 5)
-		ORANGE=$(tput setaf 4)
-		GREEN=$(tput setaf 2)
-		PURPLE=$(tput setaf 1)
-		WHITE=$(tput setaf 7)
-	fi
-	BOLD=$(tput bold)
-	RESET=$(tput sgr0)
+  tput sgr0
+  if [[ $(tput colors) -ge 256 ]] 2>/dev/null; then
+    MAGENTA=$(tput setaf 90)
+    ORANGE=$(tput setaf 172)
+    GREEN=$(tput setaf 114)
+    PURPLE=$(tput setaf 141)
+    BLUE=$(tput setaf 33)
+    WHITE=$(tput setaf 0)
+    GRAY=$(tput setaf 8)
+  else
+    MAGENTA=$(tput setaf 5)
+    ORANGE=$(tput setaf 4)
+    GREEN=$(tput setaf 2)
+    PURPLE=$(tput setaf 1)
+    WHITE=$(tput setaf 7)
+  fi
+  BOLD=$(tput bold)
+  RESET=$(tput sgr0)
 else
-	MAGENTA="\033[1;31m"
-	ORANGE="\033[1;33m"
-	GREEN="\033[1;32m"
-	PURPLE="\033[1;35m"
-	WHITE="\033[1;37m"
-	BOLD=""
-	RESET="\033[m"
+  MAGENTA="\033[1;31m"
+  ORANGE="\033[1;33m"
+  GREEN="\033[1;32m"
+  PURPLE="\033[0;35m"
+  LIGHT_PURPLE="\033[1;35m"
+  WHITE="\033[1;37m"
+  BOLD=""
+  RESET="\033[m"
   WHITE="\[\033[0;37m\]"
   GRAY="\[\033[1;30m\]"
   BLACK="\[\033[0;30m\]"

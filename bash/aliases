@@ -1,5 +1,9 @@
 #!/usr/bin/env sh
 
+# CLI Improved
+alias cat='bat'
+alias help='tldr'
+
 # Helpers
 alias reload='. ~/.bash_profile'
 
@@ -32,6 +36,8 @@ alias s='mdfind -onlyin . $1'
 # Utilities
 alias flush='dscacheutil -flushcache' # flushes dns cache
 
+alias history?="history | grep $1"
+
 # File/directory navigation
 alias md='mkdir -p'
 alias rd=rmdir
@@ -39,6 +45,8 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias mkdir='mkdir -p $1'
 alias sym='ln -s $2 $1'
+
+alias largest='du -a * | sort -r -n | head -10'
 
 # Directory tree - http://www.shell-fu.org/lister.php?id=209
 alias dirf='find . -type d | sed -e "s/[^-][^\/]*\//  |/g" -e "s/|\([^ ]\)/|-\1/"'
@@ -60,6 +68,8 @@ alias ars='sudo apachectl restart'
 # Processor and cpu
 alias tu='top -o cpu' # cpu
 alias tm='top -o vsize' # memory
+
+alias portwtf="sudo lsof -i $1"
 
 # Git
 # alias git=hub
@@ -105,14 +115,16 @@ alias routes="rake routes | sed -e \"1d\" -e \"s,^[^/]*,,g\" | awk '{print $1}' 
 alias fix='rake spec:db:fixtures:load'
 alias tl='tail -f log/development.log'
 alias migrate='rake db:migrate db:test:clone'
-alias rst='touch tmp/restart.txt'
+# alias rst='touch tmp/restart.txt'
 alias remigrate='rake db:migrate --trace && rake db:migrate:redo --trace && rake db:schema:dump db:test:prepare'
+alias rst='pkill -USR1 puma-dev'
 
 alias reset="bundle exec rake reset"
 
 # Postgres
 alias start_postgres="launchctl load -w ~/Library/LaunchAgents/org.postgresql.postgres.plist"
 alias stop_postgres="launchctl unload -w ~/Library/LaunchAgents/org.postgresql.postgres.plist"
+alias kill_postmaster="rm /usr/local/var/postgres/postmaster.pid"
 
 alias psqll="psql -U matt -l"
 alias psqld="psql -U matt -d $1"
@@ -124,10 +136,6 @@ alias psqln="createdb -O matt $1"
 alias start_mysql="launchctl load -w ~/Library/LaunchAgents/com.mysql.mysqld.plist"
 alias stop_mysql="launchctl unload -w ~/Library/LaunchAgents/com.mysql.mysqld.plist"
 
-# Screens
-alias hack='export SCREENPWD=$(pwd) SYSSCREENRC='~/.screenrc'; /usr/bin/screen -c ~/dotfiles/screen/coderc'
-alias homeit='export SCREENPWD=$(pwd) SYSSCREENRC='~/.screenrc'; /usr/bin/screen -c ~/dotfiles/screen/homerc'
-
 # Web server from anywhere - taken from http://gist.github.com/573586
 alias serve="ruby -rwebrick -e\"s = WEBrick::HTTPServer.new(:Port => 3000, :DocumentRoot => Dir.pwd); trap('INT') { s.shutdown }; s.start\""
 
@@ -138,11 +146,14 @@ alias myip="ipconfig getifaddr en0 && curl icanhazip.com"
 alias emc="/usr/local/Cellar/emacs/25.2-rc2/bin/emacsclient"
 alias et="e $1"
 
+
 # Tmux
-alias tmka="tx ls | awk '{print $1}' | sed 's/://g' | xargs -I{} tmux kill-session -t {}"
+alias tmka="tmux ls | awk '{print $1}' | sed 's/://g' | xargs -I{} tmux kill-session -t {}"
 alias tml="tmux list-sessions"
 alias tma="tmux -2 attach -t $1"
 alias tmk="tmux kill-session -t $1"
 alias tmn="tmux new -s $1"
+alias mux="clear && tmuxinator $1"
 
-alias mux="tmuxinator $1"
+# Web tools
+alias testssl="~/Workspace/tools/testssl.sh/testssl.sh $1"

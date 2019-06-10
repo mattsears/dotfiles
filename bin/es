@@ -10,16 +10,23 @@
 # the server
 
 server_ok() {
-  /usr/local/Cellar/emacs/HEAD/bin/emacsclient -a "false" -e "(boundp 'server-process)"
+  /usr/local/Cellar/emacs-plus/26.1/bin/emacsclient -a "false" -e "(boundp 'server-process)"
+}
+
+kill_emacs() {
+  echo "Shutting down Emacs server"
+  /usr/local/Cellar/emacs-plus/26.1/bin/emacsclient -e '(kill-emacs)'
+}
+
+start_emacs() {
+  ( cd ~/emacs/ ; cask build )
+  exec /usr/local/Cellar/emacs-plus/26.1/Emacs.app/Contents/MacOS/Emacs --daemon
 }
 
 if [ "t" == "$(server_ok)" ]; then
-  echo "Shutting down Emacs server"
-  # wasn't removing emacs from ALT-TAB on mac
-  # emacsclient -e "(server-force-delete)"
-  /usr/local/Cellar/emacs/25.2-rc2/bin/emacsclient -e '(kill-emacs)'
-  exec /usr/local/Cellar/emacs/25.2-rc2/Emacs.app/Contents/MacOS/Emacs --daemon
+  kill_emacs
+  start_emacs
 else
   echo "Emacs server not running. Starting now...."
-  exec /usr/local/Cellar/emacs/25.2-rc2/Emacs.app/Contents/MacOS/Emacs --daemon 
+  start_emacs
 fi
