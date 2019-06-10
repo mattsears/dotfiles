@@ -92,10 +92,3 @@ set-environment -gu RBENV_GEMSET_ALREADY
 set-environment -gu RBENV_HOOK_PATHs
 set-environment -gu RBENV_ROOT
 set-environment -gu RBENV_VERSION
-
-# List of plugins
-# set -g @plugin 'tmux-plugins/tpm'
-# set -g @plugin 'tmux-plugins/tmux-sessionist'
-
-# Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
-# run '~/.tmux/plugins/tpm/tpm'
