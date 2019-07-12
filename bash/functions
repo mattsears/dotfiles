@@ -179,7 +179,7 @@ function heroku_pg_pull(){
     read -p "> " local_database_name
     echo
     if [ "$local_database_name" == "$2" ]; then
-        curl -o heroku_pg_pull_latest_backup.dump `heroku pgbackups:url -a $1`;
+        curl -o heroku_pg_pull_latest_backup.dump `heroku pg:backups:url -a $1`;
         pg_restore --verbose --clean --no-acl --no-owner -h localhost -U `whoami` -d $2 heroku_pg_pull_latest_backup.dump;
         rm heroku_pg_pull_latest_backup.dump;
     else
@@ -187,24 +187,6 @@ function heroku_pg_pull(){
     fi
 }
 
-
-# Add reminder to Reminders.app (OS X 10.8)
-# Usage: `remind 'foo'` or `echo 'foo' | remind`
-function remind() {
-    local text
-    if [ -t 0 ]; then
-        text="$1" # argument
-    else
-        text=$(cat) # pipe
-    fi
-    osascript >/dev/null <<EOF
-tell application "Reminders"
-  tell the default list
-    make new reminder with properties {name:"$text"}
-  end tell
-end tell
-EOF
-}
 
 # Display all the colors available using tputs
 function print_colors() {
@@ -237,4 +219,14 @@ function ep  {
     else
         echo "¯\_(ツ)_/¯"
     fi
+}
+
+# Looks at what's running on a specific port
+#
+# Usage:
+#
+# $ port? [port number]
+#
+function port?() {
+    sudo lsof -n -i:$1 | grep LISTEN
 }
